@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { multiply, bleServiceEvent } from 'react-native-esmart';
+import {Button, StyleSheet, Text, View, Alert} from 'react-native';
+import { multiply, bleServiceEvent, shutdown, setCardMode, getCardMode, init } from 'react-native-esmart';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import SQLite from 'react-native-sqlite-2'
@@ -11,6 +11,16 @@ console.log(db)
 
 // Create a client
 const queryClient = new QueryClient()
+
+const useInit = () => {
+  const query = useQuery({
+    queryFn: () => init(),
+    queryKey: ['init'],
+    enabled: false,
+  })
+
+  return query;
+}
 
 function Main() {
   const a = 2
@@ -31,6 +41,8 @@ function Main() {
     throwOnError: true,
   })
 
+  // const initQuery = useInit()
+
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
@@ -42,6 +54,14 @@ function Main() {
       {bleServiceEventData && <Text>ble data - {bleServiceEventData}</Text>}
       {bleServiceEventError && <Text>ble error - {bleServiceEventError.message}</Text>}
 
+      <Button title="Init" onPress={() => init().then(result => Alert.alert(String(result))).catch(err => {
+        Alert.alert(err.message)
+        throw err;
+      })} />
+      <Button title="Shutdown" onPress={() => shutdown().then(result => Alert.alert(String(result))).catch(err => {
+        Alert.alert(err.message)
+        throw err;
+      })} />
       <StatusBar style="auto" />
     </View>
   );

@@ -24,3 +24,19 @@ export function multiply(a: number, b: number): Promise<number> {
 export function bleServiceEvent(): Promise<any> {
   return Esmart.bleServiceEvent();
 }
+
+export function init(): Promise<boolean> {
+  return Esmart.init();
+}
+
+export function shutdown(): Promise<boolean> {
+  return Esmart.shutdown();
+}
+
+export function getCardMode(): Promise<{ result: number }> {
+  return Esmart.getCardMode();
+}
+
+export function setCardMode(cardMode: number): Promise<number> {
+  return Esmart.setCardMode(cardMode);
+}
