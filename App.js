@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { multiply } from 'react-native-esmart';
+import { multiply, bleServiceEvent } from 'react-native-esmart';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import SQLite from 'react-native-sqlite-2'
@@ -13,9 +13,22 @@ console.log(db)
 const queryClient = new QueryClient()
 
 function Main() {
+  const a = 2
+  const b = 3
+
   const { data, error, isLoading } = useQuery({
-    queryFn: () => multiply(2, 3),
-    queryKey: [],
+    queryFn: () => multiply(a, b),
+    queryKey: ['multiply', a, b],
+  })
+
+  const { data: bleServiceEventData, error: bleServiceEventError, isLoading: bleServiceEventIsLoading } = useQuery({
+    queryFn: async () => {
+      const result = await bleServiceEvent()
+      console.log('bleServiceEvent', result)
+      return result
+    },
+    queryKey: ['bleServiceEvent'],
+    throwOnError: true,
   })
 
   return (
@@ -24,6 +37,11 @@ function Main() {
       {isLoading && <Text>isLoading - true</Text>}
       {data && <Text>data - {data}</Text>}
       {error && <Text>error - {error.message}</Text>}
+
+      {bleServiceEventIsLoading && <Text>ble isLoading - true</Text>}
+      {bleServiceEventData && <Text>ble data - {bleServiceEventData}</Text>}
+      {bleServiceEventError && <Text>ble error - {bleServiceEventError.message}</Text>}
+
       <StatusBar style="auto" />
     </View>
   );

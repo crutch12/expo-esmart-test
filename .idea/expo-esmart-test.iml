@@ -5,6 +5,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/esmart/lib/commonjs" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/esmart/lib/module" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/esmart/lib/typescript" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -20,3 +20,7 @@ const Esmart = NativeModules.Esmart
 export function multiply(a: number, b: number): Promise<number> {
   return Esmart.multiply(a, b);
 }
+
+export function bleServiceEvent(): Promise<any> {
+  return Esmart.bleServiceEvent();
+}

@@ -5,6 +5,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 
+import com.isbc.libesmartvirtualcard.external.IntentActions;
+
 class EsmartModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
@@ -17,6 +19,11 @@ class EsmartModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun multiply(a: Double, b: Double, promise: Promise) {
     promise.resolve(a * b)
+  }
+
+  @ReactMethod
+  fun bleServiceEvent(promise: Promise) {
+    promise.resolve(IntentActions.BLE_SERVICE_EVENT)
   }
 
   companion object {
