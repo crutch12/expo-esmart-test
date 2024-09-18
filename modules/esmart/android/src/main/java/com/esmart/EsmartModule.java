@@ -39,26 +39,22 @@ import android.util.Log;
  * This class echoes a string called from JavaScript.
  */
 public class EsmartModule extends ReactContextBaseJavaModule implements LibraryDelegate {
-    override fun getName(): String {
-        return NAME
-    }
-
-    companion object {
-        const val NAME = "Esmart"
+    public String getName() {
+        return "Esmart";
     }
 
     // Example method
     // See https://reactnative.dev/docs/native-modules-android
     @ReactMethod
-    fun multiply(a: Double, b: Double, promise: Promise) {
-        promise.resolve(a * b)
+    public void multiply(double a, double b, Promise promise) {
+        promise.resolve(a * b);
     }
 
     // custom code
 
     @ReactMethod
-    fun bleServiceEvent(promise: Promise) {
-        promise.resolve(IntentActions.BLE_SERVICE_EVENT)
+    public void bleServiceEvent(Promise promise) {
+        promise.resolve(IntentActions.BLE_SERVICE_EVENT);
     }
 
     private Context context;

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {Button, StyleSheet, Text, View, Alert} from 'react-native';
+import {Button, StyleSheet, Text, View, Alert, Pressable} from 'react-native';
 import { multiply, bleServiceEvent, shutdown, setCardMode, getCardMode, init } from 'react-native-esmart';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -38,7 +38,7 @@ function Main() {
       return result
     },
     queryKey: ['bleServiceEvent'],
-    throwOnError: true,
+    throwOnError: false,
   })
 
   // const initQuery = useInit()
@@ -53,6 +53,8 @@ function Main() {
       {bleServiceEventIsLoading && <Text>ble isLoading - true</Text>}
       {bleServiceEventData && <Text>ble data - {bleServiceEventData}</Text>}
       {bleServiceEventError && <Text>ble error - {bleServiceEventError.message}</Text>}
+
+      <Button title="Test" onPress={() => Alert.alert('Test click')}/>
 
       <Button title="Init" onPress={() => init().then(result => Alert.alert(String(result))).catch(err => {
         Alert.alert(err.message)
