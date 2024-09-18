@@ -66,7 +66,6 @@ jobs:
         run: |
           eas build --local \
             --non-interactive \
-            --output=./app-build \
             --platform=${{ github.event.inputs.platform }} \
             --profile=${{ github.event.inputs.profile }}
 
@@ -75,7 +74,12 @@ jobs:
         with:
           name: app-build
           path: |
-            app-build
+            ./*.aab
+            ./*.apk
+            ./*.ipa
+            android/app/build/outputs/**/*.aab
+            android/app/build/outputs/**/*.apk
+            ios/build/*.ipa
 
 #      - name: 🚢 Submit
 #        if: ${{ github.event.inputs.should_submit }}
