@@ -1,4 +1,5 @@
 name: Build App
+run-name: ${{ inputs.os }} - ${{ inputs.platform }} - ${{ inputs.profile }} - ${{ inputs.should_submit }}
 on:
   workflow_dispatch:
     inputs:
@@ -28,7 +29,7 @@ on:
         default: false
 jobs:
   build:
-    runs-on: ${{ github.event.inputs.os }}
+    runs-on: ${{ inputs.os }}
     strategy:
       matrix:
         node: [18.x]
@@ -66,8 +67,8 @@ jobs:
         run: |
           eas build --local \
             --non-interactive \
-            --platform=${{ github.event.inputs.platform }} \
-            --profile=${{ github.event.inputs.profile }}
+            --platform=${{ inputs.platform }} \
+            --profile=${{ inputs.profile }}
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
@@ -82,5 +83,5 @@ jobs:
             ios/build/*.ipa
 
 #      - name: 🚢 Submit
-#        if: ${{ github.event.inputs.should_submit }}
-#        run: eas submit -p ${{ github.event.inputs.platform }} --profile ${{ github.event.inputs.profile }} --path app-build
+#        if: ${{ inputs.should_submit }}
+#        run: eas submit -p ${{ inputs.platform }} --profile ${{ inputs.profile }} --path app-build
