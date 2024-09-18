@@ -13,12 +13,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.isbc.libesmartvirtualcard.external.IntentActions;
 import com.isbc.libesmartvirtualcard.external.LibEsmartVirtualCard;
 import com.isbc.libesmartvirtualcard.external.LibraryDelegate;
+import com.isbc.libesmartvirtualcard.external.CardMode;
 
 // import org.apache.cordova.CallbackContext;
 // import org.apache.cordova.CordovaPlugin;
 // import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +68,7 @@ public class EsmartModule extends ReactContextBaseJavaModule implements LibraryD
 
     @Override
     public void onLibraryInitFinish() {
-        Log.d("onLibraryInitFinish");
+        Log.d("onLibraryInitFinish", "onLibraryInitFinish");
     }
 
     @Override
@@ -127,14 +129,14 @@ public class EsmartModule extends ReactContextBaseJavaModule implements LibraryD
     private String createInitialConstantByValue(int value) {
         String constantName = null;
         switch (value) {
-            case LibEsmartVirtualCard.FAILURE_BLE_NOT_SUPPORTED: constantName = LibEsmartVirtualCardProxy.FAILURE_BLE_NOT_SUPPORTED; break;
-            case LibEsmartVirtualCard.FAILURE_HCE_NOT_SUPPORTED: constantName = LibEsmartVirtualCardProxy.FAILURE_HCE_NOT_SUPPORTED; break;
-            case LibEsmartVirtualCard.FAILURE_NO: constantName = LibEsmartVirtualCardProxy.FAILURE_NO; break;
-            case LibEsmartVirtualCard.FAILURE_PERMISSION_REQUIRED: constantName = LibEsmartVirtualCardProxy.FAILURE_PERMISSION_REQUIRED; break;
-            case LibEsmartVirtualCard.FAILURE_PIN_REQUIRED: constantName = LibEsmartVirtualCardProxy.FAILURE_PIN_REQUIRED; break;
-            case LibEsmartVirtualCard.FAILURE_PIN_WRONG: constantName = LibEsmartVirtualCardProxy.FAILURE_PIN_WRONG; break;
-            case LibEsmartVirtualCard.WARNING_BLUETOOTH_PERMISSION_MISSED: constantName = LibEsmartVirtualCardProxy.WARNING_BLUETOOTH_PERMISSION_MISSED; break;
-            case LibEsmartVirtualCard.WARNING_NFC_PERMISSION_MISSED: constantName = LibEsmartVirtualCardProxy.WARNING_NFC_PERMISSION_MISSED; break;
+            case LibEsmartVirtualCard.FAILURE_BLE_NOT_SUPPORTED: constantName = "FAILURE_BLE_NOT_SUPPORTED"; break;
+            case LibEsmartVirtualCard.FAILURE_HCE_NOT_SUPPORTED: constantName = "FAILURE_HCE_NOT_SUPPORTED"; break;
+            case LibEsmartVirtualCard.FAILURE_NO: constantName = "FAILURE_NO"; break;
+            case LibEsmartVirtualCard.FAILURE_PERMISSION_REQUIRED: constantName = "FAILURE_PERMISSION_REQUIRED"; break;
+            case LibEsmartVirtualCard.FAILURE_PIN_REQUIRED: constantName = "FAILURE_PIN_REQUIRED"; break;
+            case LibEsmartVirtualCard.FAILURE_PIN_WRONG: constantName = "FAILURE_PIN_WRONG"; break;
+            case LibEsmartVirtualCard.WARNING_BLUETOOTH_PERMISSION_MISSED: constantName = "WARNING_BLUETOOTH_PERMISSION_MISSED"; break;
+            case LibEsmartVirtualCard.WARNING_NFC_PERMISSION_MISSED: constantName = "WARNING_NFC_PERMISSION_MISSED"; break;
         }
 
         return constantName;
