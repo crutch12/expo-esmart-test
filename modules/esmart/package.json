@@ -35,6 +35,14 @@
   "files": [
     "src",
     "lib",
+    "android",
+    "ios",
+    "windows",
+    "cpp",
+    "react-native-esmart.podspec",
+    "!lib/typescript/example",
+    "!android/build",
+    "!ios/build",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
