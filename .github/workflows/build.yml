@@ -80,6 +80,12 @@ jobs:
       - name: 📦 Install dependencies
         run: npm i
 
+      - name: 📦 Build libs
+        run: npm run build-libs
+
+      - name: 📦 Install built libs
+        run: npm run install-libs
+
 #      - name: 📋 Test project
 #        run: yarn test
 
