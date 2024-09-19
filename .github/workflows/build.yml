@@ -37,6 +37,26 @@ jobs:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
+      - name: 🏗 Setup credentials - json (ios)
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.EXPO_CREDENTIALS_BASE64 }}
+          filename: "credentials.json"
+
+      - name: 🏗 Setup credentials - profile (ios)
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.EXPO_IOS_PROFILE_BASE64 }}
+          filename: "eafbdd00-35fa-4660-a539-289d34f6486a.mobileprovision"
+          working-directory: "ios/certs"
+
+      - name: 🏗 Setup credentials - cert (ios)
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.EXPO_IOS_CERT_BASE64 }}
+          filename: "development.p12"
+          working-directory: "ios/certs"
+
       - name: 🏗 Setup Node
         uses: actions/setup-node@v3
         with:
