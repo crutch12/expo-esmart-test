@@ -60,7 +60,18 @@ function Main() {
         Alert.alert(err.message)
         throw err;
       })} />
+
       <Button title="Shutdown" onPress={() => shutdown().then(result => Alert.alert(String(result))).catch(err => {
+        Alert.alert(err.message)
+        throw err;
+      })} />
+
+      <Button title="SetCardMode1" onPress={() => setCardMode(1).then(result => Alert.alert(String(result))).catch(err => {
+        Alert.alert(err.message)
+        throw err;
+      })} />
+
+      <Button title="GetCardMode" onPress={() => getCardMode().then(result => Alert.alert(JSON.stringify(result))).catch(err => {
         Alert.alert(err.message)
         throw err;
       })} />

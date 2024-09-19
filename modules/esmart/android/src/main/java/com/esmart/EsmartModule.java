@@ -32,6 +32,13 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+// https://stackoverflow.com/questions/48056126/pass-java-object-to-react-native-component-and-vice-versa
+// https://stackoverflow.com/questions/46125406/how-to-pass-an-object-back-from-a-react-native-android-module-to-javascript
+// https://medium.com/shoutem/ways-to-pass-objects-between-native-and-javascript-in-react-native-c3dcae7bf4f5
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -110,17 +117,17 @@ public class EsmartModule extends ReactContextBaseJavaModule implements LibraryD
         promise.resolve(true);
     }
 
-
     @ReactMethod
-    public void getCardMode(Promise promise) throws JSONException {
+    public void getCardMode(Promise promise) {
         CardMode cardMode = LibEsmartVirtualCard.getCardMode();
 
-        JSONObject result = new JSONObject().put("result", cardMode.ordinal());
-        promise.resolve(result);
+        WritableMap map = Arguments.createMap();
+        map.putInt("result", cardMode.ordinal());
+        promise.resolve(map);
     }
 
     @ReactMethod
-    public void setCardMode(int cardModeValue, Promise promise) throws JSONException {
+    public void setCardMode(int cardModeValue, Promise promise) {
         CardMode cardMode = CardMode.valueOf(cardModeValue);
         LibEsmartVirtualCard.setCardMode(cardMode);
         promise.resolve(cardModeValue);
