@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<table name="readerTypes">
+	<columns>
+		_id					INTEGER PRIMARY KEY AUTOINCREMENT,
+		ReaderTypeId 		INTEGER,
+		ReaderTypeName		TEXT,
+		TapArea				INTEGER,
+		NotificationArea	INTEGER
+	</columns>
+</table>

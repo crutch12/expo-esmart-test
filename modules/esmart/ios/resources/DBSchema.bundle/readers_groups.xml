@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<table name="readerGroups">
+	<columns>
+		_id						INTEGER PRIMARY KEY AUTOINCREMENT,
+		GroupId 				TEXT,
+		GroupName				TEXT,
+		KeyId					INTEGER,
+		UserId					BLOB,
+		DefTapArea				INTEGER,
+		DefNotificationArea		INTEGER,
+		AdminEMail				TEXT,
+		AdminPhone				TEXT,
+		HelpText				TEXT,
+		HelpTextInt				TEXT,
+		UpdatedByLastImport 	INTEGER,
+		ImportTimeStamp 		REAL,
+		Enabled					INTEGER,
+		ExchangeVersion			TEXT,
+		ExchangeType			TEXT,
+		PublicKey				BLOB,
+		PublicKeyTimeStamp		REAL,
+		VerifyDoneTimeStamp		REAL,
+		ExpireCheckTimeStamp	REAL,
+		Expire					INTEGER,
+		Expired					INTEGER,
+        ActivationId            TEXT
+	</columns>
+	<uniqueConstraint>
+		GroupId
+	</uniqueConstraint>
+	<update for="1.15">
+		<alter columns="UpdatedByLastImport,INTEGER,," />
+	</update>
+	<update for="1.16">
+		<alter columns="ImportTimeStamp,REAL,,;DefTapArea,INTEGER,,;DefNotificationArea,INTEGER,,;AdminEMail,TEXT,,;AdminPhone,TEXT,,;HelpText,TEXT,,;HelpTextInt,TEXT,," />
+	</update>
+	<update for="1.18">
+		<alter columns="Enabled,INTEGER,,1" />
+	</update>
+	<update for="1.19">
+		<alter columns="ExchangeVersion,TEXT,,1.0;ExchangeType,TEXT,,ONLINE" />
+	</update>
+	<update for="1.20">
+        <alter columns="PublicKey,BLOB,,;PublicKeyTimeStamp,REAL,,;VerifyDoneTimeStamp,REAL,,;ExpireCheckTimeStamp,REAL,,;Expire,INTEGER,,;Expired,INTEGER,,;ActivationId,TEXT,," />
+		<insert>
+			<field name="GroupId" type="TEXT">873C9266740000000000000000000000</field>
+			<field name="GroupName" type="TEXT">ESMART® Доступ</field>
+			<field name="KeyId" type="INTEGER">18</field>
+			<field name="UserId" type="BLOB"></field>
+			<field name="DefTapArea" type="INTEGER">210</field>
+			<field name="DefNotificationArea" type="INTEGER">198</field>
+			<field name="AdminEMail" type="TEXT">access@esmart.ru</field>
+			<field name="AdminPhone" type="TEXT">84957398699</field>
+			<field name="HelpText" type="TEXT"></field>
+			<field name="HelpTextInt" type="TEXT"></field>
+			<field name="UpdatedByLastImport" type="INTEGER">0</field>
+			<field name="ImportTimeStamp" type="REAL">-1</field>
+			<field name="Enabled" type="INTEGER">1</field>
+			<field name="ExchangeVersion" type="TEXT">3.0</field>
+			<field name="ExchangeType" type="TEXT">ONLINE</field>
+			<field name="PublicKey" type="BLOB">MIIBCgKCAQEA4KmlPPy/+TN5tFPTcK++hYx8COvHs3Jk9r5NCsLSU4/bM8DLxvQGrT9vYzdb2xKlxQL/SGkrMIVOi4tvdmZh/oyfsyAC2woL8sNfsrskWHueP1ys/pQpXOTi6JM9F3dobTJYFee0W8AxY/vxAYDoot9wmIEx7I8yLBOeYcmV5EP7CzjEPeWTqA52tz75HjVlBiWHjpsLuZRSJbLWxIs3W8gvptJRXjdt2thHioFSi5UZAqMNItIyAEH/2rlXtdYkNTgAfgCmkEo0s21LAzZIfLv0zrMWjKw99PPgDV4sqOoQZtIWepnWmko/owE9oaBakpqoPCJAgWKXQto0fz4m+QIDAQAB</field>
+			<field name="PublicKeyTimeStamp" type="REAL">-1</field>
+			<field name="VerifyDoneTimeStamp" type="REAL">0</field>
+			<field name="ExpireCheckTimeStamp" type="REAL">0</field>
+			<field name="Expire" type="REAL">0</field>
+		</insert>
+	</update>
+	<update for="1.25">
+		<sql sql="update readerGroups set ExchangeVersion='3.0'" />
+	</update>
+	<row>
+		<field name="GroupId" type="TEXT">873C9266740000000000000000000000</field>
+		<field name="GroupName" type="TEXT">ESMART® Доступ</field>
+		<field name="KeyId" type="INTEGER">18</field>
+		<field name="UserId" type="BLOB"></field>
+		<field name="DefTapArea" type="INTEGER">210</field>
+		<field name="DefNotificationArea" type="INTEGER">198</field>
+		<field name="AdminEMail" type="TEXT">access@esmart.ru</field>
+		<field name="AdminPhone" type="TEXT">84957398699</field>
+		<field name="HelpText" type="TEXT"></field>
+		<field name="HelpTextInt" type="TEXT"></field>
+		<field name="UpdatedByLastImport" type="INTEGER">0</field>
+		<field name="ImportTimeStamp" type="REAL">-1</field>
+		<field name="Enabled" type="INTEGER">1</field>
+		<field name="ExchangeVersion" type="TEXT">3.0</field>
+		<field name="ExchangeType" type="TEXT">ONLINE</field>
+		<field name="PublicKey" type="BLOB">MIIBCgKCAQEA4KmlPPy/+TN5tFPTcK++hYx8COvHs3Jk9r5NCsLSU4/bM8DLxvQGrT9vYzdb2xKlxQL/SGkrMIVOi4tvdmZh/oyfsyAC2woL8sNfsrskWHueP1ys/pQpXOTi6JM9F3dobTJYFee0W8AxY/vxAYDoot9wmIEx7I8yLBOeYcmV5EP7CzjEPeWTqA52tz75HjVlBiWHjpsLuZRSJbLWxIs3W8gvptJRXjdt2thHioFSi5UZAqMNItIyAEH/2rlXtdYkNTgAfgCmkEo0s21LAzZIfLv0zrMWjKw99PPgDV4sqOoQZtIWepnWmko/owE9oaBakpqoPCJAgWKXQto0fz4m+QIDAQAB</field>
+		<field name="PublicKeyTimeStamp" type="REAL">-1</field>
+		<field name="VerifyDoneTimeStamp" type="REAL">0</field>
+		<field name="ExpireCheckTimeStamp" type="REAL">0</field>
+		<field name="Expire" type="REAL">0</field>
+	</row>
+</table>

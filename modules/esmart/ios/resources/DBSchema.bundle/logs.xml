@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<table name="logs">
+	<columns>
+		_id					INTEGER PRIMARY KEY AUTOINCREMENT,
+		TimeStamp 			REAL,
+		Message				TEXT
+	</columns>
+	<uniqueConstraint>
+		_id, TimeStamp
+	</uniqueConstraint>
+</table>

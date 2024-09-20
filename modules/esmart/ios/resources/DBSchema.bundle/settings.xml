@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<table name="settings">
+	<columns>
+		_id					INTEGER PRIMARY KEY AUTOINCREMENT,
+		AES_REST			BLOB
+	</columns>
+	<uniqueConstraint>
+		_id
+	</uniqueConstraint>
+</table>
