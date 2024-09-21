@@ -50,4 +50,5 @@ Pod::Spec.new do |s|
 
   # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
   s.preserve_path = "ios/libEsmartVirtualCard-Bridging-Header.h"
+  s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h' }
 end
