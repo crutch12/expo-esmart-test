@@ -15,7 +15,6 @@
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		D36524C835F8AEB23179E14E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 22D39DB61AAF4066637D3C00 /* PrivacyInfo.xcprivacy */; };
-		DE304F3BE863456389AF54CE /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9964DA1E6C6C449380EFCE1B /* noop-file.swift */; };
 		63FB627F209A48C88CEE253A /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0210DEFAB0744CEA9D5FA1A2 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,8 +29,6 @@
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-expoesmarttest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-expoesmarttest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-expoesmarttest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-expoesmarttest.debug.xcconfig"; path = "Target Support Files/Pods-expoesmarttest/Pods-expoesmarttest.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-expoesmarttest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-expoesmarttest.release.xcconfig"; path = "Target Support Files/Pods-expoesmarttest/Pods-expoesmarttest.release.xcconfig"; sourceTree = "<group>"; };
-		9964DA1E6C6C449380EFCE1B /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "expoesmarttest/noop-file.swift"; sourceTree = "<group>"; };
-		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = expoesmarttest/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		EA60738AFF034C37A98F65EB /* expoesmarttest-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "expoesmarttest-Bridging-Header.h"; path = "expoesmarttest/expoesmarttest-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -207,7 +204,6 @@
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				D36524C835F8AEB23179E14E /* PrivacyInfo.xcprivacy in Resources */,
 				E94A3E6D47CB4F879121FEC7 /* SplashScreen.storyboard in Resources */,
 			);
@@ -328,7 +324,6 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				DE304F3BE863456389AF54CE /* noop-file.swift in Sources */,
 				63FB627F209A48C88CEE253A /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
