@@ -12,7 +12,8 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "ZoneInfo.h"
 #import "ImportableDataItem.h"
-#import "ReaderStatuses.h" // fixes ISO C++ forbids forward references to 'enum' types
+// @NOTE: fixes "ISO C++ forbids forward references to 'enum' types"
+#import "ReaderStatuses.h"
 
 @interface ReaderProfile : ImportableDataItem
 	@property unsigned char rssi;
