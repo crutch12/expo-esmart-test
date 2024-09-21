@@ -27,6 +27,8 @@ on:
         description: Whether to perform the submit step
         required: true
         default: false
+env:
+  EAS_BUILD_WORKINGDIR: ${{ github.workspace }}
 jobs:
   build:
     runs-on: ${{ inputs.os }}
@@ -96,18 +98,13 @@ jobs:
             --platform=${{ inputs.platform }} \
             --profile=${{ inputs.profile }}
 
-      - name: Prepare Logs
-        id: prepare-logs
-        if: always()
-        run: echo "EAS_BUILD_WORKINGDIR=$EAS_BUILD_WORKINGDIR" >> $GITHUB_OUTPUT
-
       - name: Collect logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: logs
           path: |
-            ${{ steps.prepare-logs.outputs.EAS_BUILD_WORKINGDIR || '/not-found' }}/**/*.log
+            ${{ env.EAS_BUILD_WORKINGDIR || '/not-found' }}/**/*.log
 #           example: /var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/eas-build-local-nodejs/f38c9623-76d4-4099-9233-ab4fa5a3dedf
 
       - name: Archive artifacts
