@@ -5,7 +5,8 @@
 //  Created by Денис Либит on 04.03.2019.
 //
 
-#import "AppDelegate.h"
+// #import "AppDelegate.h"
+#import <RCTAppDelegate.h>
 
 @interface AppDelegate (Launch)
 
