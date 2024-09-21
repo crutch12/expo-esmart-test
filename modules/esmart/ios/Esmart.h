@@ -6,8 +6,8 @@
 //
 
 // #import "AppDelegate.h"
-// #import "RCTAppDelegate.h"
-#import <React/RCTAppDelegate.h>
+#import "RCTAppDelegate.h"
+// #import <React/RCTAppDelegate.h> // почему-то не работает
 
 @interface RCTAppDelegate (Launch)
 
