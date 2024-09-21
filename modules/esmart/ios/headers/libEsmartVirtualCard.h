@@ -33,6 +33,8 @@
 + (void) hostAppDidEnterBackground: (UIApplication *)application;
 + (void) hostAppDidBecomeActive: (UIApplication *)application;
 + (void) hostAppDidWillTerminate: (UIApplication *)application;
+// @NOTE: renamed hostAppDidFinishLaunchingWithOptions -> hostAppDidFinishLaunching
++ (void) hostAppDidFinishLaunching: (NSDictionary *)launchOptions;
 #endif
 + (DeviceVersion *) determineDevice;
 enum CARD_MODE {
