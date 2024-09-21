@@ -26,12 +26,12 @@
 #import "ReaderStatuses.h"
 #import "ZoneInfo.h"
 
-@implementation MyAppDelegate
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    [super application:application didFinishLaunchingWithOptions:launchOptions];
-    return YES;
-}
+// @implementation MyAppDelegate
+// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+// {
+//     [super application:application didFinishLaunchingWithOptions:launchOptions];
+//     return YES;
+// }
 // - (RCTBridge *)createBridgeWithDelegate:(id<RCTBridgeDelegate>)delegate launchOptions:(NSDictionary*)launchOptions {
 //
 //
@@ -56,7 +56,7 @@
 //
 //     return returnValue;
 // }
-@end
+// @end
 
 
 

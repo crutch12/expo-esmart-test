@@ -9,9 +9,9 @@
 #import "RCTAppDelegate.h"
 // #import <React/RCTAppDelegate.h> // почему-то не работает
 
-@interface MyAppDelegate : RCTAppDelegate
-
-@end
+// @interface MyAppDelegate : RCTAppDelegate
+//
+// @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNEsmartSpec.h"
