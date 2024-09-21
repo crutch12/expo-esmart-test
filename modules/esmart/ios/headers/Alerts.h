@@ -9,7 +9,8 @@
 #ifndef IsbcBeacon_Alerts_h
 #define IsbcBeacon_Alerts_h
 
-@import CoreFoundation;
+// @import CoreFoundation;
+#import <CoreFoundation/CoreFoundation.h>
 
 @interface Alerts : NSObject
 

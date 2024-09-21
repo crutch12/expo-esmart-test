@@ -8,7 +8,8 @@
 
 #ifndef ReaderProfile_h
 #define ReaderProfile_h
-@import CoreBluetooth;
+// @import CoreBluetooth;
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "ZoneInfo.h"
 #import "ImportableDataItem.h"
 

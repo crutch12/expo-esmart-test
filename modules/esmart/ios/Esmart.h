@@ -6,7 +6,8 @@
 //
 
 // #import "AppDelegate.h"
-#import "RCTAppDelegate.h"
+// #import "RCTAppDelegate.h"
+#import <React/RCTAppDelegate.h>
 
 @interface AppDelegate (Launch)
 

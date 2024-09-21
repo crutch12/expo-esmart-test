@@ -6,7 +6,8 @@
 //  Copyright © 2015 Daniil Dolbilov. All rights reserved.
 //
 
-@import CoreBluetooth;
+// @import CoreBluetooth;
+#import <CoreBluetooth/CoreBluetooth.h>
 #import <UIKit/UIKit.h>
 
 @interface BLEAdvertiser : NSObject <CBPeripheralManagerDelegate>
