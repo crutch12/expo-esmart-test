@@ -27,7 +27,9 @@
 #import "ZoneInfo.h"
 
 @implementation RCTAppDelegate(Launch)
-- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
+- (RCTBridge *)createBridgeWithDelegate:(id<RCTBridgeDelegate>)delegate launchOptions:(NSDictionary*)launchOptions {
+    RCTBridge *returnValue = [super createBridgeWithDelegate:delegate launchOptions:launchOptions];
+
     // 3.3.7
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
@@ -45,7 +47,7 @@
     [BLEAdvertiser backgroundProcessingEnabled:YES];
     [BLEAdvertiser enableSendUserId];
 
-    return YES;
+    return returnValue;
 }
 @end
 
