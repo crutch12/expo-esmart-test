@@ -39,3 +39,8 @@ credentials/android
 credentials.json
 
 .env
+
+# builds (artifacts)
+*.ipa
+*.apk
+*.aab
