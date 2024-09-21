@@ -26,7 +26,7 @@
 #import "ReaderStatuses.h"
 #import "ZoneInfo.h"
 
-@implementation AppDelegate(Launch)
+@implementation RCTAppDelegate(Launch)
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
     BOOL returnValue = [super application:application didFinishLaunchingWithOptions:launchOptions];
     if (returnValue) {
