@@ -33,7 +33,9 @@ Pod::Spec.new do |s|
       s.pod_target_xcconfig    = {
           "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
           "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
-          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
+          # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
+          'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h'
       }
       s.dependency "React-Codegen"
       s.dependency "RCT-Folly"
@@ -47,6 +49,5 @@ Pod::Spec.new do |s|
   s.dependency "ExpoModulesCore"
 
   # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
-  s.preserve_path = "${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h"
-  s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h' }
+  s.preserve_path = "ios/libEsmartVirtualCard-Bridging-Header.h"
 end
