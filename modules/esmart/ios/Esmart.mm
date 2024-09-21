@@ -26,29 +26,36 @@
 #import "ReaderStatuses.h"
 #import "ZoneInfo.h"
 
-@implementation RCTAppDelegate(Launch)
-- (RCTBridge *)createBridgeWithDelegate:(id<RCTBridgeDelegate>)delegate launchOptions:(NSDictionary*)launchOptions {
-    RCTBridge *returnValue = [super createBridgeWithDelegate:delegate launchOptions:launchOptions];
-
-    // 3.3.7
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
-    [[NSUserDefaults standardUserDefaults] setInteger:MODE_HANDS_FREE forKey:@"CardMode"];
-
-    [Logger purgeLogs];
-    [Logger realTimeLog:YES];
-
-    if ([Logger logsPaused]) {
-        [Logger pauseLogs]; // метод вкл/выкл логов один и тот же
-    }
-
-    [libKeyCard hostAppDidFinishLaunchingWithOptions:launchOptions];
-
-    [BLEAdvertiser backgroundProcessingEnabled:YES];
-    [BLEAdvertiser enableSendUserId];
-
-    return returnValue;
+@implementation MyAppDelegate
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [super application:application didFinishLaunchingWithOptions:launchOptions];
+    return YES;
 }
+// - (RCTBridge *)createBridgeWithDelegate:(id<RCTBridgeDelegate>)delegate launchOptions:(NSDictionary*)launchOptions {
+//
+//
+//     RCTBridge *returnValue = [super createBridgeWithDelegate:delegate launchOptions:launchOptions];
+//
+//     // 3.3.7
+//     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
+//     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
+//     [[NSUserDefaults standardUserDefaults] setInteger:MODE_HANDS_FREE forKey:@"CardMode"];
+//
+//     [Logger purgeLogs];
+//     [Logger realTimeLog:YES];
+//
+//     if ([Logger logsPaused]) {
+//         [Logger pauseLogs]; // метод вкл/выкл логов один и тот же
+//     }
+//
+//     [libKeyCard hostAppDidFinishLaunchingWithOptions:launchOptions];
+//
+//     [BLEAdvertiser backgroundProcessingEnabled:YES];
+//     [BLEAdvertiser enableSendUserId];
+//
+//     return returnValue;
+// }
 @end
 
 
