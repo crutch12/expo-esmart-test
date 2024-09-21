@@ -26,7 +26,6 @@ Pod::Spec.new do |s|
     install_modules_dependencies(s)
   else
     s.dependency "React-Core"
-    s.dependency "ExpoModulesCore"
 
     # Don't install the dependencies when we run `pod install` in the old architecture.
     if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
@@ -43,4 +42,11 @@ Pod::Spec.new do |s|
       s.dependency "ReactCommon/turbomodule/core"
     end
   end
+
+  # @NOTE: ExpoModulesCore для appDelegateSubscribers
+  s.dependency "ExpoModulesCore"
+
+  # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
+  s.preserve_path = "${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h"
+  s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h' }
 end
