@@ -6,7 +6,7 @@
 //
 
 // #import "AppDelegate.h"
-#import <RCTAppDelegate.h>
+#import "RCTAppDelegate.h"
 
 @interface AppDelegate (Launch)
 
