@@ -102,7 +102,7 @@ jobs:
         with:
           name: logs
           path: |
-            $EAS_BUILD_WORKINGDIR/**/*.log
+            ${{ echo "$EAS_BUILD_WORKINGDIR" }}/**/*.log
 #           example: /var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/eas-build-local-nodejs/f38c9623-76d4-4099-9233-ab4fa5a3dedf
 
       - name: Archive artifacts
