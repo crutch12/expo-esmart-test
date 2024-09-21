@@ -28,27 +28,24 @@
 
 @implementation RCTAppDelegate(Launch)
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-    BOOL returnValue = [super application:application didFinishLaunchingWithOptions:launchOptions];
-    if (returnValue) {
+    // 3.3.7
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
+    [[NSUserDefaults standardUserDefaults] setInteger:MODE_HANDS_FREE forKey:@"CardMode"];
 
-        // 3.3.7
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
-        [[NSUserDefaults standardUserDefaults] setInteger:MODE_HANDS_FREE forKey:@"CardMode"];
+    [Logger purgeLogs];
+    [Logger realTimeLog:YES];
 
-        [Logger purgeLogs];
-        [Logger realTimeLog:YES];
-
-        if ([Logger logsPaused]) {
-            [Logger pauseLogs]; // метод вкл/выкл логов один и тот же
-        }
-
-        [libKeyCard hostAppDidFinishLaunchingWithOptions:launchOptions];
-
-        [BLEAdvertiser backgroundProcessingEnabled:YES];
-        [BLEAdvertiser enableSendUserId];
+    if ([Logger logsPaused]) {
+        [Logger pauseLogs]; // метод вкл/выкл логов один и тот же
     }
-    return returnValue;
+
+    [libKeyCard hostAppDidFinishLaunchingWithOptions:launchOptions];
+
+    [BLEAdvertiser backgroundProcessingEnabled:YES];
+    [BLEAdvertiser enableSendUserId];
+
+    return YES;
 }
 @end
 
