@@ -39,7 +39,7 @@ jobs:
           echo '- Profile: ${{ inputs.profile }}' >> $GITHUB_STEP_SUMMARY
           echo '- Should submit: ${{ inputs.should_submit }}' >> $GITHUB_STEP_SUMMARY
           echo '- System: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}' >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: [${{ github.sha }}](${{ github.event.repository.html_url }}/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
 
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
@@ -63,6 +63,14 @@ jobs:
           base64-encoded-secret: ${{ secrets.EXPO_IOS_CERT_BASE64 }}
           filename: "dist-cert.p12"
           working-directory: "credentials/ios"
+
+      - name: 🏗 Decrypt .aar/.jar/.a files with secrets.ENCRYPTION_PASSPHRASE
+        # IT'S PUBLIC REPOSITORY. Files encrypted using gpg:
+        # $ gpg --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg -c ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar
+        # $ gpg --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/ios/libs/libEsmartVirtualCard.a.gpg -c ./modules/esmart/ios/libs/libEsmartVirtualCard.a
+        run: |
+          gpg --quiet --yes --passphrase "${{ secrets.ENCRYPTION_PASSPHRASE }}" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg
+          gpg --quiet --yes --passphrase "${{ secrets.ENCRYPTION_PASSPHRASE }}" -o ./modules/esmart/ios/libs/libEsmartVirtualCard.a ./modules/esmart/ios/libs/libEsmartVirtualCard.a.gpg
 
       - name: 🏗 Setup Node
         uses: actions/setup-node@v3
@@ -161,7 +169,7 @@ jobs:
           echo '- App ID: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.app_id || '--' }}' >> $GITHUB_STEP_SUMMARY
 
           echo '### Installation QR Code 📱' >> $GITHUB_STEP_SUMMARY
-          echo '![qr-code](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.app_id || 'https://http.cat/images/404.jpg' }})' >> $GITHUB_STEP_SUMMARY
+          echo '![qr-code](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.image || 'https://http.cat/images/404.jpg' }})' >> $GITHUB_STEP_SUMMARY
 
           echo '### Original response' >> $GITHUB_STEP_SUMMARY
           echo '```json' >> $GITHUB_STEP_SUMMARY

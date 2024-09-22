@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   # @NOTE: Без этого .a файлы не линкуются в проект (!)
   # https://guides.cocoapods.org/syntax/podspec.html#vendored_libraries
-  s.vendored_libraries = 'ios/libEsmartVirtualCard.a'
+  s.vendored_libraries = 'ios/libs/libEsmartVirtualCard.a'
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
