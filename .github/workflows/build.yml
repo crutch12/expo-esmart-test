@@ -68,6 +68,7 @@ jobs:
         # IT'S PUBLIC REPOSITORY. Files encrypted using gpg:
         # $ gpg --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg -c ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar
         # $ gpg --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/ios/libs/libEsmartVirtualCard.a.gpg -c ./modules/esmart/ios/libs/libEsmartVirtualCard.a
+        if: ${{ secrets.ENCRYPTION_PASSPHRASE }}
         run: |
           gpg --quiet --yes --passphrase "${{ secrets.ENCRYPTION_PASSPHRASE }}" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg
           gpg --quiet --yes --passphrase "${{ secrets.ENCRYPTION_PASSPHRASE }}" -o ./modules/esmart/ios/libs/libEsmartVirtualCard.a ./modules/esmart/ios/libs/libEsmartVirtualCard.a.gpg
