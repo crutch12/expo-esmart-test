@@ -101,7 +101,7 @@ jobs:
 
       - name: Collect logs
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ !cancelled() }}
         with:
           name: logs
           path: |
@@ -119,6 +119,33 @@ jobs:
             android/app/build/outputs/**/*.aab
             android/app/build/outputs/**/*.apk
             ios/build/*.ipa
+
+      - name: Generate installation link for .ipa (iOS only)
+        if: ${{ !cancelled() && !failure() && inputs.platform == 'ios' }}
+        run: |
+          export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | grep -E "^<meta.*name=.*\"csrf-token\".*content=\".*\".*>$" | grep -Po 'content=\"\K[^"]+' )
+
+          echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
+
+          export INSTALL_ON_AIR_FILE=$(ls | grep *.ipa)
+
+          echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
+
+          curl -X POST -H "Accept: application/json" --silent -v -F ajax=1 -F user_id=0 -F submitBtn= -F _token=$INSTALL_ON_AIR_CSRF_TOKEN -F ipafile=@$INSTALL_ON_AIR_FILE https://fupload.installonair.com/ipafile > response-json.txt
+  
+          cat response-json.txt
+  
+          export INSTALL_ON_AIR_RESPONSE_JSON=$(grep -Po '{.*}' response-json.txt)
+          
+          echo "INSTALL_ON_AIR_RESPONSE_JSON: $INSTALL_ON_AIR_RESPONSE_JSON"
+
+          echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
+
+      - name: Installation link for .ipa (https://installonair.com)
+        if: ${{ !cancelled() && !failure() && inputs.platform == 'ios' }}
+        run: |
+          echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
+          echo '```json\n${{ toJson(fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON)) }}```' >> $GITHUB_STEP_SUMMARY
 
 #      - name: 🚢 Submit
 #        if: ${{ inputs.should_submit }}
