@@ -5,5 +5,5 @@
 # Or decrypt using
 
 ```shell
-$ gpg --quiet --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/ios/libEsmartVirtualCard.a ./modules/esmart/android/ios/libEsmartVirtualCard.a.gpg
+$ gpg --yes --batch --decrypt --passphrase "$ENCRYPTION_PASSPHRASE" -o ./modules/esmart/ios/libEsmartVirtualCard.a ./modules/esmart/ios/libEsmartVirtualCard.a.gpg
 ```

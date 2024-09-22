@@ -5,5 +5,5 @@
 # Or decrypt using
 
 ```shell
-$ gpg --quiet --yes --passphrase "ENCRYPTION_PASSPHRASE" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg
+$ gpg --yes --batch --decrypt --passphrase "$ENCRYPTION_PASSPHRASE" -o ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar.gpg
 ```
