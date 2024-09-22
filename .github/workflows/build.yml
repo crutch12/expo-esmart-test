@@ -1,14 +1,8 @@
 name: Build App
-run-name: ${{ inputs.os }} - ${{ inputs.platform }} - ${{ inputs.profile }} - ${{ inputs.should_submit }}
+run-name: ${{ inputs.platform }} - ${{ inputs.profile }} - ${{ inputs.should_submit }} - ${{ github.sha }}
 on:
   workflow_dispatch:
     inputs:
-      os:
-        type: choice
-        description: OS to build on. Ubuntu is faster, MacOS supports iOS builds
-        options:
-          - ubuntu-latest
-          - macos-latest
       platform:
         type: choice
         description: Platform to build for
@@ -32,7 +26,7 @@ env:
   EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
 jobs:
   build:
-    runs-on: ${{ inputs.os }}
+    runs-on: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
     strategy:
       matrix:
         node: [18.x]
