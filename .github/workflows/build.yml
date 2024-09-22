@@ -114,14 +114,14 @@ jobs:
             android/app/build/outputs/**/*.apk
             ios/build/*.ipa
 
-      - name: Generate installation link for .ipa (iOS only)
-        if: ${{ !cancelled() && !failure() && inputs.platform == 'ios' }}
+      - name: Generate installation link for .ipa/.aab/.apk
+        if: ${{ !cancelled() && !failure() }}
         run: |
           export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | grep -E "^<meta.*name=.*\"csrf-token\".*content=\".*\".*>$" | grep -Po 'content=\"\K[^"]+' )
 
           echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
 
-          export INSTALL_ON_AIR_FILE=$(ls | grep *.ipa)
+          export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|aab|apk]')
 
           echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
 
@@ -135,7 +135,7 @@ jobs:
 
           echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
 
-      - name: Installation link for .ipa (https://installonair.com)
+      - name: Installation link for .ipa/.aab/.apk (https://installonair.com)
         if: ${{ !cancelled() && !failure() && inputs.platform == 'ios' }}
         run: |
           echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
