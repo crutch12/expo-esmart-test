@@ -117,7 +117,7 @@ jobs:
       - name: Generate installation link for .ipa/.aab/.apk
         if: ${{ !cancelled() && !failure() }}
         run: |
-          export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | grep -E "^<meta.*name=.*\"csrf-token\".*content=\".*\".*>$" | grep -Po 'content=\"\K[^"]+' )
+          export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | awk '/<meta.*csrf-token.*content="(.+)".*>/ { print substr($3, 10, 100) }' | awk '{sub(/">/,"")}1' )
 
           echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
 
@@ -129,8 +129,8 @@ jobs:
   
           cat response-json.txt
   
-          export INSTALL_ON_AIR_RESPONSE_JSON=$(grep -Po '{.*}' response-json.txt)
-          
+          export INSTALL_ON_AIR_RESPONSE_JSON=$(awk '{/.*/}1' response-json.txt)
+
           echo "INSTALL_ON_AIR_RESPONSE_JSON: $INSTALL_ON_AIR_RESPONSE_JSON"
 
           echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
