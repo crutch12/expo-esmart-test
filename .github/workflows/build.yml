@@ -22,18 +22,26 @@ on:
         required: true
         default: false
 env:
+  # Eas local env
   EAS_LOCAL_BUILD_WORKINGDIR: ${{ github.workspace }}/tmp
   EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
+  # Custom env
+  BUILDER_OS: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
 jobs:
   build:
-    runs-on: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
+    runs-on: ${{ env.BUILDER_OS }}
     strategy:
       matrix:
         node: [18.x]
     steps:
-      - name: Workflow info
+      - name: ℹ️ Workflow info
         run: |
-          echo '${{ toJson(github) }}' >> $GITHUB_STEP_SUMMARY
+          echo '## Job info ℹ️' >> $GITHUB_STEP_SUMMARY
+          echo '- Platform: ${{ inputs.platform }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Profile: ${{ inputs.profile }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Should submit: ${{ inputs.should_submit }}' >> $GITHUB_STEP_SUMMARY
+          echo '- System: ${{ env.BUILDER_OS }}' >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: [${{ github.sha }}](${{ github.event.repository.html_url }}/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
 
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
@@ -97,19 +105,19 @@ jobs:
             --platform=${{ inputs.platform }} \
             --profile=${{ inputs.profile }}
 
-      - name: Collect logs
+      - name: 📑 Collect logs
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: logs
+          name: logs-${{ inputs.platform }}-${{ github.event.repository.name }}-${{ github.run_number }}
           path: |
             ${{ env.EAS_LOCAL_BUILD_WORKINGDIR || '/not-found' }}/**/*.log
 #           example: /var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/eas-build-local-nodejs/f38c9623-76d4-4099-9233-ab4fa5a3dedf
 
-      - name: Archive artifacts
+      - name: 📦 Archive artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: app-build
+          name: build-${{ inputs.platform }}-${{ github.event.repository.name }}-${{ github.run_number }}
           path: |
             ./*.aab
             ./*.apk
@@ -118,32 +126,49 @@ jobs:
             android/app/build/outputs/**/*.apk
             ios/build/*.ipa
 
-      - name: Generate installation link for .ipa/.aab/.apk
+      - name: ✈️ Generate installation link for .ipa/.aab/.apk
         if: ${{ !cancelled() && !failure() }}
-        run: |
-          export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | awk '/<meta.*csrf-token.*content="(.+)".*>/ { print substr($3, 10, 100) }' | awk '{sub(/">/,"")}1' )
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 3
+          max_attempts: 2
+          command: |
+            export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | awk '/<meta.*csrf-token.*content="(.+)".*>/ { print substr($3, 10, 100) }' | awk '{sub(/">/,"")}1' )
 
-          echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
-
-          export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|aab|apk]')
-
-          echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
-
-          curl -X POST -H "Accept: application/json" --silent -v -F ajax=1 -F user_id=0 -F submitBtn= -F _token=$INSTALL_ON_AIR_CSRF_TOKEN -F ipafile=@$INSTALL_ON_AIR_FILE https://fupload.installonair.com/ipafile > response-json.txt
+            echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
   
-          cat response-json.txt
+            export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|aab|apk]')
   
-          export INSTALL_ON_AIR_RESPONSE_JSON=$(awk '{/.*/}1' response-json.txt)
+            echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
+  
+            curl -X POST -H "Accept: application/json" --silent -v -F ajax=1 -F user_id=0 -F submitBtn= -F _token=$INSTALL_ON_AIR_CSRF_TOKEN -F ipafile=@$INSTALL_ON_AIR_FILE https://fupload.installonair.com/ipafile > response-json.txt
+            
+            cat response-json.txt
+            
+            export INSTALL_ON_AIR_RESPONSE_JSON=$(awk '{/.*/}1' response-json.txt)
+  
+            echo "INSTALL_ON_AIR_RESPONSE_JSON: $INSTALL_ON_AIR_RESPONSE_JSON"
+  
+            echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
 
-          echo "INSTALL_ON_AIR_RESPONSE_JSON: $INSTALL_ON_AIR_RESPONSE_JSON"
-
-          echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
-
-      - name: Installation link for .ipa/.aab/.apk (https://installonair.com)
-        if: ${{ !cancelled() && !failure() && inputs.platform == 'ios' }}
+      - name: ✈️ Show installation link for .ipa/.aab/.apk (https://installonair.com)
+        if: ${{ !cancelled() && !failure() && env.INSTALL_ON_AIR_RESPONSE_JSON }}
         run: |
-          echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
-          echo '```json\n${{ toJson(fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON)) }}```' >> $GITHUB_STEP_SUMMARY
+          echo '## Install On Air ✈️' >> $GITHUB_STEP_SUMMARY
+
+          echo '- Success: **${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).status || '--' }}**' >> $GITHUB_STEP_SUMMARY
+          echo '- Name: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.appName || '--' }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Link: [installation link](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.link || '--' }})' >> $GITHUB_STEP_SUMMARY
+          echo '- Expiration: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.expiryDate || '--' }}' >> $GITHUB_STEP_SUMMARY
+          echo '- App ID: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.app_id || '--' }}' >> $GITHUB_STEP_SUMMARY
+
+          echo '### Installation QR Code 📱' >> $GITHUB_STEP_SUMMARY
+          echo '![qr-code](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.app_id || 'https://http.cat/images/404.jpg' }})' >> $GITHUB_STEP_SUMMARY
+
+          echo '### Original response' >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON)) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
 #      - name: 🚢 Submit
 #        if: ${{ inputs.should_submit }}
