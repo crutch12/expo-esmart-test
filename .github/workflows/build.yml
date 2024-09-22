@@ -25,11 +25,9 @@ env:
   # Eas local env
   EAS_LOCAL_BUILD_WORKINGDIR: ${{ github.workspace }}/tmp
   EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
-  # Custom env
-  BUILDER_OS: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
 jobs:
   build:
-    runs-on: ${{ env.BUILDER_OS }}
+    runs-on: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
     strategy:
       matrix:
         node: [18.x]
@@ -40,7 +38,7 @@ jobs:
           echo '- Platform: ${{ inputs.platform }}' >> $GITHUB_STEP_SUMMARY
           echo '- Profile: ${{ inputs.profile }}' >> $GITHUB_STEP_SUMMARY
           echo '- Should submit: ${{ inputs.should_submit }}' >> $GITHUB_STEP_SUMMARY
-          echo '- System: ${{ env.BUILDER_OS }}' >> $GITHUB_STEP_SUMMARY
+          echo '- System: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}' >> $GITHUB_STEP_SUMMARY
           echo "- Commit: [${{ github.sha }}](${{ github.event.repository.html_url }}/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
 
       - name: 🏗 Setup repo
