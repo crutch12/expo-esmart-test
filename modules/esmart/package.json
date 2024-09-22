@@ -12,7 +12,8 @@
     "version": "0.41.2"
   },
   "devDependencies": {
-    "react-native-builder-bob": "^0.30.2"
+    "react-native-builder-bob": "^0.30.2",
+    "typescript": "^5.6.2"
   },
   "source": "./src/index.tsx",
   "module": "./lib/module/index.js",
@@ -30,6 +31,7 @@
     }
   },
   "scripts": {
+    "build": "bob build",
     "prepare": "bob build"
   },
   "files": [
