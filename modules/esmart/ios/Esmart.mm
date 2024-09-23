@@ -39,8 +39,10 @@ typedef NSDictionary *(^NotificationHandler)(NSNotification *);
 
 // @property (nonatomic, strong) CLLocationManager *locationManager;
 // @property (nonatomic, strong) NSString *beaconMonitorPrepareCallbackID;
-// @property (nonatomic, strong) NSString *notificationsCallbackID;
-// @property (nonatomic, strong) NSDictionary<NSString *, NotificationHandler> *reactions;
+
+// @property (nonatomic, strong) NSString *notificationsCallbackID; // remove
+@property (nonatomic, copy) RCTResponseSenderBlock *notificationsCallback;
+@property (nonatomic, strong) NSDictionary<NSString *, NotificationHandler> *reactions;
 
 @end
 
@@ -59,6 +61,11 @@ RCT_EXPORT_METHOD(multiply:(double)a
     NSNumber *result = @(a * b);
 
     resolve(result);
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // #pragma mark - Настройки
@@ -894,11 +901,121 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 // }
 //
-// #pragma mark - Уведомления библиотеки
-//
+
+#pragma mark - Уведомления библиотеки
+
+RCT_EXPORT_METHOD(registerForNotifications: notificationsCallback: (RCTResponseSenderBlock)notificationsCallback)
+{
+  self.notificationsCallback = notificationsCallback;
+
+  self.reactions = @{
+                     @"POWER_ON": ^NSDictionary *(NSNotification *notification) {
+                         return @{};
+                     },
+                     @"POWER_OFF": ^NSDictionary *(NSNotification *notification) {
+                         return @{};
+                     },
+                     @"POWER_RESET": ^NSDictionary *(NSNotification *notification) {
+                         return @{};
+                     },
+                     @"REFRESH_READERS_LIST": ^NSDictionary *(NSNotification *notification) {
+                         return @{};
+                     },
+                     @"SHOW_NOTIFICATION": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         return dict;
+                     },
+                     @"HIDE_NOTIFICATION": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         return [dict copy];
+                     },
+                     @"ADVERTISEMENT_STARTED": ^NSDictionary *(NSNotification *notification) {
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"ERROR"] = notification.userInfo[@"ERROR"];
+                         return [dict copy];
+                     },
+                     @"READER_UPDATE_STATE": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSString *state = notification.userInfo[@"STATE"];
+                         Group *group = notification.userInfo[@"GROUP"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         dict[@"STATE"] = state;
+                         dict[@"GROUP"] = group.groupId;
+                         return [dict copy];
+                     },
+                     @"RSSI_CHANGED": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         return [dict copy];
+                     },
+                     @"USERID_FOR_GROUP_REQUIRED": ^NSDictionary *(NSNotification *notification) {
+                         Group *group = notification.userInfo[@"GROUP"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"GROUP"] = group.groupId;
+                         return [dict copy];
+                     },
+                     @"READER_EVENT": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSString *type = notification.userInfo[@"TYPE"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         dict[@"TYPE"] = type;
+                         return [dict copy];
+                     },
+                     @"GROUP_SUSPENDED": ^NSDictionary *(NSNotification *notification) {
+                         Group *group = notification.userInfo[@"GROUP"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"GROUP"] = group.groupId;
+                         return [dict copy];
+                     },
+                     @"IMPORT": ^NSDictionary *(NSNotification *notification) {
+                         NSString *state = notification.userInfo[@"STATE"];
+                         NSNumber *result = notification.userInfo[@"RESULT"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"STATE"] = state;
+                         dict[@"RESULT"] = result;
+                         return [dict copy];
+                     },
+                     @"GROUP_EXPIRED": ^NSDictionary *(NSNotification *notification) {
+                         Group *group = notification.userInfo[@"GROUP"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"GROUP"] = group.groupId;
+                         return [dict copy];
+                     },
+                     @"CAN_MANUAL_SEND_USERID": ^NSDictionary *(NSNotification *notification) {
+                         ReaderProfile *reader = notification.userInfo[@"READER"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"READER"] = reader.identifier;
+                         return [dict copy];
+                     },
+                     @"GROUP_DISABLED": ^NSDictionary *(NSNotification *notification) {
+                         Group *group = notification.userInfo[@"GROUP"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"GROUP"] = group.groupId;
+                         return [dict copy];
+                     },
+                     @"ADVERTISEMENT_STATE": ^NSDictionary *(NSNotification *notification) {
+                         NSString *state = notification.userInfo[@"STATE"];
+                         NSError *error = notification.userInfo[@"ERROR"];
+                         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                         dict[@"STATE"] = state;
+                         dict[@"ERROR"] = [error localizedDescription];
+                         return [dict copy];
+                     },
+                     };
+
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(libraryNotification:) name:@"ESMART_VIRTUAL_CARD_EVENT" object:nil];
+}
+
 // - (void)registerForNotifications:(CDVInvokedUrlCommand *)command
 // {
-//     self.notificationsCallbackID = command.callbackId;
+//     self.notificationsCallbackID = command.callbackId; // remove
 //
 //     self.reactions = @{
 //                        @"POWER_ON": ^NSDictionary *(NSNotification *notification) {
@@ -1004,27 +1121,31 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //
 //     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(libraryNotification:) name:@"ESMART_VIRTUAL_CARD_EVENT" object:nil];
 // }
-//
-// - (void)libraryNotification:(NSNotification *)notification
-// {
-//     NSString *event = notification.userInfo[@"EVT"];
-//
-//     if (!event) {
-//         return;
-//     }
-//
-//     NotificationHandler handler = self.reactions[event];
-//
-//     if (!handler) {
-//         return;
-//     }
-//     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:handler(notification)];
-//     dict[@"EVT"] = event;
-//
-//     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict];
-//     pluginResult.keepCallback = @YES;
-//
-//     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.notificationsCallbackID];
-// }
+
+- (void)libraryNotification:(NSNotification *)notification
+{
+    NSString *event = notification.userInfo[@"EVT"];
+
+    if (!event) {
+        return;
+    }
+
+    NotificationHandler handler = self.reactions[event];
+
+    if (!handler) {
+        return;
+    }
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:handler(notification)];
+    dict[@"EVT"] = event;
+
+    // CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict]; // remove
+    // pluginResult.keepCallback = @YES; // remove
+
+    // [self.commandDelegate sendPluginResult:pluginResult callbackId:self.notificationsCallbackID]; // remove
+
+    if (self.notificationsCallback) {
+      self.notificationsCallback(dict);
+    }
+}
 
 @end
