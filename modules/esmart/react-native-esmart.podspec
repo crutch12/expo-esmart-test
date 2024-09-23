@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
           "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
           "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
           # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
-          # @FIXME: Remove? Replace? Duplicate lower?
+          # UPD: Won't work with expo. You should never add this code (fails too: ios/libEsmartVirtualCard-Bridging-Header.h)
           # 'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h'
       }
       s.dependency "React-Codegen"
