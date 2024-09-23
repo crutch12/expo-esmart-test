@@ -28,7 +28,7 @@
 
 @interface Esmart (prvate)
 
-// -(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types;
+-(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types;
 
 - (NSDictionary*) mapZoneInfo:(ZoneInfo*) zoneInfo;
 @end
@@ -67,122 +67,76 @@ RCT_EXPORT_METHOD(multiply:(double)a
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-// #pragma mark - Настройки
-//
-// - (void)globalPropertyGetVirtualCardEnabled:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"VirtualCardEnabled"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetVirtualCardEnabled:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"VirtualCardEnabled"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
-// - (void)globalPropertyGetPersistedUserIdStore:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"PersistedUserIdStore"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetPersistedUserIdStore:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"PersistedUserIdStore"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
-// - (void)globalPropertyGetUseExternalUserIdGenerator:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"UseExternalUserIdGenerator"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetUseExternalUserIdGenerator:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"UseExternalUserIdGenerator"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
-// - (void)globalPropertyGetOldDeviceOverride:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OldDeviceOverride"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetOldDeviceOverride:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"OldDeviceOverride"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
-// - (void)globalPropertyGetTapAreaComfortSelector:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"TapAreaComfortSelector"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetTapAreaComfortSelector:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"TapAreaComfortSelector"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
-// - (void)globalPropertyGetOnlyKnownGroupsAllowed:(CDVInvokedUrlCommand *)command
-// {
-//     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OnlyKnownGroupsAllowed"];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
-// - (void)globalPropertySetOnlyKnownGroupsAllowed:(CDVInvokedUrlCommand *)command
-// {
-//     NSNumber *argument = [command argumentAtIndex:0 withDefault:nil andClass:[NSNumber class]];
-//
-//     if (argument) {
-//         [[NSUserDefaults standardUserDefaults] setBool:[argument boolValue] forKey:@"OnlyKnownGroupsAllowed"];
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-//     } else {
-//         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-//     }
-// }
-//
+#pragma mark - Настройки
+
+RCT_EXPORT_METHOD(globalPropertyGetVirtualCardEnabled: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"VirtualCardEnabled"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetVirtualCardEnabled: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"VirtualCardEnabled"];
+    resolve(enabled);
+}
+
+RCT_EXPORT_METHOD(globalPropertyGetPersistedUserIdStore: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"PersistedUserIdStore"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetPersistedUserIdStore: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"PersistedUserIdStore"];
+    resolve(enabled);
+}
+
+RCT_EXPORT_METHOD(globalPropertyGetUseExternalUserIdGenerator: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"UseExternalUserIdGenerator"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetUseExternalUserIdGenerator: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"UseExternalUserIdGenerator"];
+    resolve(enabled);
+}
+
+RCT_EXPORT_METHOD(globalPropertyGetOldDeviceOverride: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OldDeviceOverride"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetOldDeviceOverride: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"OldDeviceOverride"];
+    resolve(enabled);
+}
+
+RCT_EXPORT_METHOD(globalPropertyGetTapAreaComfortSelector: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"TapAreaComfortSelector"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetTapAreaComfortSelector: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"TapAreaComfortSelector"];
+    resolve(enabled);
+}
+
+RCT_EXPORT_METHOD(globalPropertyGetOnlyKnownGroupsAllowed: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OnlyKnownGroupsAllowed"];
+    resolve(value);
+}
+
+RCT_EXPORT_METHOD(globalPropertySetOnlyKnownGroupsAllowed: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"OnlyKnownGroupsAllowed"];
+    resolve(enabled);
+}
+
 // #pragma mark - libKeyCard
 //
 // - (void)libKeyCardGetAPIVersion:(CDVInvokedUrlCommand *)command
@@ -788,6 +742,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //
 // #pragma mark - DataFormatter
 //
+
+// @REMOVE: Not used
 // /// Переводит ASCII-строку с шестнадцатеричными цифрами в последовательность байтового представления
 // -(void) dataFromHexString :(CDVInvokedUrlCommand*)command {
 //
@@ -803,6 +759,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     }
 // }
 //
+
+// @REMOVE: Not used
 // /// преобразует байты данных в ASCII-строку.
 // -(void) bytesToHexString:(CDVInvokedUrlCommand*)command{
 //
@@ -820,8 +778,11 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 //
+
 // #pragma mark - Logger
 //
+
+// @REMOVE: Not used (should keep)
 // /// Cброс накопленных логов в отладочную консоль
 // -(void) loggerDumpLogs:(CDVInvokedUrlCommand *)command {
 //
@@ -830,6 +791,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 //
+
+// @REMOVE: Not used (should keep)
 // /// Принудительное удаление логов
 // -(void) loggerPurgeLogs:(CDVInvokedUrlCommand *)command {
 //
@@ -839,6 +802,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 // }
 //
 //
+
+// @REMOVE: Not used (should keep)
 // /// Возвращает число лог-записей (одна запись - одно событие)
 // -(void) loggerGetCountLogs:(CDVInvokedUrlCommand *)command {
 //
@@ -847,6 +812,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 //
+
+// @REMOVE: Not used (should keep)
 // /// флаг вывода логируемых событий в отладочную консоль в момент возникновения события.
 // -(void) loggerSetRealTimeLog :(CDVInvokedUrlCommand *)command {
 //
@@ -862,6 +829,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     }
 // }
 //
+
+// @REMOVE: Not used (should keep)
 // /// включить/выключить логирование
 // -(void) loggerPauseLogs :(CDVInvokedUrlCommand *)command{
 //
@@ -870,6 +839,8 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 //
+
+// @REMOVE: Not used (should keep)
 // ///  текущее состояние ведения логов.
 // -(void) loggerGetLogsPaused :(CDVInvokedUrlCommand *)command{
 //
@@ -878,23 +849,23 @@ RCT_EXPORT_METHOD(multiply:(double)a
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 //
-// #pragma mark - Private methods
-//
-// -(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types {
-//     if (args.count < types.count) {
-//         return NO;
-//     }
-//     NSUInteger count = types.count;
-//     for (int i = 0; i < count; i++) {
-//         NSObject* obj = args[i];
-//         Class type = types[i];
-//         if ([obj isKindOfClass:type] == NO) {
-//             return NO;
-//         }
-//     }
-//     return YES;
-// }
-//
+#pragma mark - Private methods
+
+-(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types {
+    if (args.count < types.count) {
+        return NO;
+    }
+    NSUInteger count = types.count;
+    for (int i = 0; i < count; i++) {
+        NSObject* obj = args[i];
+        Class type = types[i];
+        if ([obj isKindOfClass:type] == NO) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 // - (void) sendErrorWithCallbackId:(NSString*) callbackId {
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];

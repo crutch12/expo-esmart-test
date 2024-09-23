@@ -42,3 +42,51 @@ export function bleServiceEvent(): Promise<any> {
 export function registerForNotifications(listener: (result: EsmartEvent) => void) {
   return Esmart.registerForNotifications(listener); // (!) singleton
 }
+
+export function globalPropertyGetVirtualCardEnabled(): Promise<boolean> {
+  return Esmart.globalPropertyGetVirtualCardEnabled();
+}
+
+export function globalPropertySetVirtualCardEnabled(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetVirtualCardEnabled(value);
+}
+
+export function globalPropertyGetPersistedUserIdStore(): Promise<boolean> {
+  return Esmart.globalPropertyGetPersistedUserIdStore();
+}
+
+export function globalPropertySetPersistedUserIdStore(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetPersistedUserIdStore(value);
+}
+
+export function globalPropertyGetUseExternalUserIdGenerator(): Promise<boolean> {
+  return Esmart.globalPropertyGetUseExternalUserIdGenerator();
+}
+
+export function globalPropertySetUseExternalUserIdGenerator(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetUseExternalUserIdGenerator(value);
+}
+
+export function globalPropertyGetOldDeviceOverride(): Promise<boolean> {
+  return Esmart.globalPropertyGetOldDeviceOverride();
+}
+
+export function globalPropertySetOldDeviceOverride(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetOldDeviceOverride(value);
+}
+
+export function globalPropertyGetTapAreaComfortSelector(): Promise<boolean> {
+  return Esmart.globalPropertyGetTapAreaComfortSelector();
+}
+
+export function globalPropertySetTapAreaComfortSelector(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetTapAreaComfortSelector(value);
+}
+
+export function globalPropertyGetOnlyKnownGroupsAllowed(): Promise<boolean> {
+  return Esmart.globalPropertyGetOnlyKnownGroupsAllowed();
+}
+
+export function globalPropertySetOnlyKnownGroupsAllowed(value: boolean): Promise<boolean> {
+  return Esmart.globalPropertySetOnlyKnownGroupsAllowed(value);
+}
