@@ -142,7 +142,7 @@ RCT_EXPORT_METHOD(globalPropertySetOnlyKnownGroupsAllowed: enabled:(BOOL)enabled
 RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     NSString *value = [libKeyCard apiVersion];
-    resolve(@(value));
+    resolve(value);
 }
 
 // #pragma mark - ReaderController
