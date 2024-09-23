@@ -90,3 +90,7 @@ export function globalPropertyGetOnlyKnownGroupsAllowed(): Promise<boolean> {
 export function globalPropertySetOnlyKnownGroupsAllowed(value: boolean): Promise<boolean> {
   return Esmart.globalPropertySetOnlyKnownGroupsAllowed(value);
 }
+
+export function libKeyCardGetAPIVersion(): Promise<string> {
+  return Esmart.libKeyCardGetAPIVersion();
+}

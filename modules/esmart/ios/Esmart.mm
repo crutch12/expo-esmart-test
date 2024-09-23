@@ -137,15 +137,14 @@ RCT_EXPORT_METHOD(globalPropertySetOnlyKnownGroupsAllowed: enabled:(BOOL)enabled
     resolve(enabled);
 }
 
-// #pragma mark - libKeyCard
-//
-// - (void)libKeyCardGetAPIVersion:(CDVInvokedUrlCommand *)command
-// {
-//     NSString *value = [libKeyCard apiVersion];
-//     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:value];
-//     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-// }
-//
+#pragma mark - libKeyCard
+
+RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+{
+    NSString *value = [libKeyCard apiVersion];
+    resolve(@(value));
+}
+
 // #pragma mark - ReaderController
 //
 // - (void)readerControllerLoadDBConfigForReader:(CDVInvokedUrlCommand *)command
