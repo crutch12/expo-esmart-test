@@ -41,7 +41,7 @@ typedef NSDictionary *(^NotificationHandler)(NSNotification *);
 // @property (nonatomic, strong) NSString *beaconMonitorPrepareCallbackID;
 
 // @property (nonatomic, strong) NSString *notificationsCallbackID; // remove
-@property (nonatomic, copy) RCTResponseSenderBlock *notificationsCallback;
+@property (nonatomic, copy) RCTResponseSenderBlock notificationsCallback;
 @property (nonatomic, strong) NSDictionary<NSString *, NotificationHandler> *reactions;
 
 @end
