@@ -10,3 +10,4 @@
 - expo и .gitignore: eas build игнорирует файлы из всех .gitignore (https://docs.expo.dev/build-reference/easignore/)
 - - неочевидная проблема #1: такое поведение распространяется ДАЖЕ на eas build --local
 - - неочевидная проблема #2: .easignore, созданный рядом с .gitignore в дочерних директориях - ни на что не влияет, надо всё настраивать в корневой директории (https://github.com/expo/expo/blob/07d561b42396fd95452417899e775b993a384181/packages/expo-doctor/src/utils/files.ts#L40)
+- нельзя менять `SWIFT_OBJC_BRIDGING_HEADER` в .podspec (s.pod_target_xcconfig['SWIFT_OBJC_BRIDGING_HEADER']), это приводит к ошибке (expo сам конфигурирует это, несмотря на https://github.com/CocoaPods/CocoaPods/issues/3639)
