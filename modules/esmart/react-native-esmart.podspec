@@ -50,5 +50,6 @@ Pod::Spec.new do |s|
   s.dependency "ExpoModulesCore"
 
   # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
-  s.preserve_path = "ios/libEsmartVirtualCard-Bridging-Header.h"
+  # UPD: It works without too
+  # s.preserve_path = "ios/libEsmartVirtualCard-Bridging-Header.h"
 end
