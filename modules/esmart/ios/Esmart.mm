@@ -28,7 +28,7 @@
 
 @interface Esmart (prvate)
 
--(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types;
+-(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray *)types;
 
 - (NSDictionary*) mapZoneInfo:(ZoneInfo*) zoneInfo;
 @end
@@ -142,7 +142,7 @@ RCT_EXPORT_METHOD(globalPropertySetOnlyKnownGroupsAllowed: enabled:(BOOL)enabled
 RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     NSString *value = [libKeyCard apiVersion];
-    resolve(@(value));
+    resolve(value);
 }
 
 // #pragma mark - ReaderController
@@ -850,18 +850,17 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //
 #pragma mark - Private methods
 
--(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types {
+- (BOOL)checkArguments:(NSArray *)args withTypes:(NSArray *)types {
     if (args.count < types.count) {
         return NO;
     }
-    NSUInteger count = types.count;
-    for (int i = 0; i < count; i++) {
-        NSObject* obj = args[i];
-        Class type = types[i];
-        if ([obj isKindOfClass:type] == NO) {
+
+    for (NSUInteger i = 0; i < types.count; i++) {
+        if (![args[i] isKindOfClass:types[i]]) {
             return NO;
         }
     }
+
     return YES;
 }
 
