@@ -72,69 +72,69 @@ RCT_EXPORT_METHOD(multiply:(double)a
 RCT_EXPORT_METHOD(globalPropertyGetVirtualCardEnabled: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"VirtualCardEnabled"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetVirtualCardEnabled: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"VirtualCardEnabled"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 RCT_EXPORT_METHOD(globalPropertyGetPersistedUserIdStore: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"PersistedUserIdStore"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetPersistedUserIdStore: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"PersistedUserIdStore"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 RCT_EXPORT_METHOD(globalPropertyGetUseExternalUserIdGenerator: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"UseExternalUserIdGenerator"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetUseExternalUserIdGenerator: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"UseExternalUserIdGenerator"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 RCT_EXPORT_METHOD(globalPropertyGetOldDeviceOverride: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OldDeviceOverride"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetOldDeviceOverride: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"OldDeviceOverride"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 RCT_EXPORT_METHOD(globalPropertyGetTapAreaComfortSelector: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"TapAreaComfortSelector"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetTapAreaComfortSelector: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"TapAreaComfortSelector"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 RCT_EXPORT_METHOD(globalPropertyGetOnlyKnownGroupsAllowed: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     BOOL value = [[NSUserDefaults standardUserDefaults] boolForKey:@"OnlyKnownGroupsAllowed"];
-    resolve(value);
+    resolve(@(value));
 }
 
 RCT_EXPORT_METHOD(globalPropertySetOnlyKnownGroupsAllowed: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"OnlyKnownGroupsAllowed"];
-    resolve(enabled);
+    resolve(@(enabled));
 }
 
 #pragma mark - libKeyCard
