@@ -26,40 +26,6 @@
 #import "ReaderStatuses.h"
 #import "ZoneInfo.h"
 
-// @implementation MyAppDelegate
-// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-// {
-//     [super application:application didFinishLaunchingWithOptions:launchOptions];
-//     return YES;
-// }
-// - (RCTBridge *)createBridgeWithDelegate:(id<RCTBridgeDelegate>)delegate launchOptions:(NSDictionary*)launchOptions {
-//
-//
-//     RCTBridge *returnValue = [super createBridgeWithDelegate:delegate launchOptions:launchOptions];
-//
-//     // 3.3.7
-//     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"VirtualCardEnabled"];
-//     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LogsEnabled"];
-//     [[NSUserDefaults standardUserDefaults] setInteger:MODE_HANDS_FREE forKey:@"CardMode"];
-//
-//     [Logger purgeLogs];
-//     [Logger realTimeLog:YES];
-//
-//     if ([Logger logsPaused]) {
-//         [Logger pauseLogs]; // метод вкл/выкл логов один и тот же
-//     }
-//
-//     [libKeyCard hostAppDidFinishLaunchingWithOptions:launchOptions];
-//
-//     [BLEAdvertiser backgroundProcessingEnabled:YES];
-//     [BLEAdvertiser enableSendUserId];
-//
-//     return returnValue;
-// }
-// @end
-
-
-
 @interface Esmart (prvate)
 
 // -(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types;
@@ -94,38 +60,6 @@ RCT_EXPORT_METHOD(multiply:(double)a
 
     resolve(result);
 }
-
-#pragma mark - Жизненный цикл
-
-// - (void)pluginInitialize
-// {
-//     [super pluginInitialize];
-//
-//     // пробрасываем состояние приложения в библиотеку
-//     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-//     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)    name:UIApplicationDidBecomeActiveNotification    object:nil];
-//     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)      name:UIApplicationWillTerminateNotification      object:nil];
-// }
-
-// - (void)dealloc
-// {
-//     [[NSNotificationCenter defaultCenter] removeObserver:self];
-// }
-//
-// - (void)applicationDidEnterBackground:(UIApplication *)application
-// {
-//     [libKeyCard hostAppDidEnterBackground:application];
-// }
-//
-// - (void)applicationDidBecomeActive:(UIApplication *)application
-// {
-//     [libKeyCard hostAppDidBecomeActive:application];
-// }
-//
-// - (void)applicationWillTerminate:(NSNotification *)notification
-// {
-//     [libKeyCard hostAppDidWillTerminate:[notification object]];
-// }
 
 // #pragma mark - Настройки
 //
