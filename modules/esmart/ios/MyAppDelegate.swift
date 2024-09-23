@@ -24,7 +24,7 @@ public class MyAppDelegate: ExpoAppDelegateSubscriber {
   }
 
   // "required" is required
-  public override required init() {
+  public required init() {
     super.init()
 
     // @NOTE: Не создаём подписку на NotificationCenter.default.addObserver, т.к. методы класса AppDelegate и так реализуют эту подписку
