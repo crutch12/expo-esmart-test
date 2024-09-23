@@ -1029,7 +1029,7 @@ RCT_EXPORT_METHOD(registerForNotifications: notificationsCallback: (RCTResponseS
     dict[@"EVT"] = event;
 
     if (self.notificationsCallback) {
-      self.notificationsCallback(dict);
+      self.notificationsCallback(@[dict]);
     }
 }
 
