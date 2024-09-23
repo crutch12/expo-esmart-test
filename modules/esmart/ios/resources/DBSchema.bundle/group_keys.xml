@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<table name="group_keys">
+	<columns>
+		_id						INTEGER PRIMARY KEY AUTOINCREMENT,
+		GROUP_ID 				TEXT,
+		UpdatedByLastImport		INTEGER,
+		AES_BLE					BLOB,
+		AES_NFC					BLOB,
+		KEY_VERSION				BLOB,
+		AES_EXCHANGE			BLOB
+	</columns>
+	<uniqueConstraint>
+		_id, GROUP_ID
+	</uniqueConstraint>
+</table>

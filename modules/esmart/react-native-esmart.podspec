@@ -14,7 +14,11 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => ".git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm}"
+  s.source_files = "ios/**/*.{h,m,mm,swift}"
+
+  # @NOTE: Без этого .a файлы не линкуются в проект (!)
+  # https://guides.cocoapods.org/syntax/podspec.html#vendored_libraries
+  s.vendored_libraries = 'ios/libEsmartVirtualCard.a'
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
@@ -29,7 +33,10 @@ Pod::Spec.new do |s|
       s.pod_target_xcconfig    = {
           "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
           "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
-          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
+          # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
+          # @FIXME: Remove? Replace? Duplicate lower?
+          'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_ROOT}/react-native-esmart/ios/libEsmartVirtualCard-Bridging-Header.h'
       }
       s.dependency "React-Codegen"
       s.dependency "RCT-Folly"
@@ -38,4 +45,10 @@ Pod::Spec.new do |s|
       s.dependency "ReactCommon/turbomodule/core"
     end
   end
+
+  # @NOTE: ExpoModulesCore для appDelegateSubscribers
+  s.dependency "ExpoModulesCore"
+
+  # @NOTE: https://github.com/CocoaPods/CocoaPods/issues/3639
+  s.preserve_path = "ios/libEsmartVirtualCard-Bridging-Header.h"
 end

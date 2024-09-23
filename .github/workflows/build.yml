@@ -1,14 +1,8 @@
 name: Build App
-run-name: ${{ inputs.os }} - ${{ inputs.platform }} - ${{ inputs.profile }} - ${{ inputs.should_submit }}
+run-name: ${{ inputs.platform }} - ${{ inputs.profile }} - ${{ inputs.should_submit }} - ${{ github.sha }}
 on:
   workflow_dispatch:
     inputs:
-      os:
-        type: choice
-        description: OS to build on. Ubuntu is faster, MacOS supports iOS builds
-        options:
-          - ubuntu-latest
-          - macos-latest
       platform:
         type: choice
         description: Platform to build for
@@ -27,13 +21,28 @@ on:
         description: Whether to perform the submit step
         required: true
         default: false
+env:
+  # Eas local env
+  EAS_LOCAL_BUILD_WORKINGDIR: ${{ github.workspace }}/tmp
+  EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
+  # Custon
+  ENCRYPTION_PASSPHRASE: ${{ secrets.ENCRYPTION_PASSPHRASE }}
 jobs:
   build:
-    runs-on: ${{ inputs.os }}
+    runs-on: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}
     strategy:
       matrix:
         node: [18.x]
     steps:
+      - name: ℹ️ Workflow info
+        run: |
+          echo '## Job info ℹ️' >> $GITHUB_STEP_SUMMARY
+          echo '- Platform: ${{ inputs.platform }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Profile: ${{ inputs.profile }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Should submit: ${{ inputs.should_submit }}' >> $GITHUB_STEP_SUMMARY
+          echo '- System: ${{ inputs.platform == 'android' && 'ubuntu-latest' || 'macos-latest' }}' >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: [${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
+
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
@@ -47,15 +56,24 @@ jobs:
         uses: mobiledevops/secret-to-file-action@v1
         with:
           base64-encoded-secret: ${{ secrets.EXPO_IOS_PROFILE_BASE64 }}
-          filename: "eafbdd00-35fa-4660-a539-289d34f6486a.mobileprovision"
-          working-directory: "ios/certs"
+          filename: "profile.mobileprovision"
+          working-directory: "credentials/ios"
 
       - name: 🏗 Setup credentials - cert (ios)
         uses: mobiledevops/secret-to-file-action@v1
         with:
           base64-encoded-secret: ${{ secrets.EXPO_IOS_CERT_BASE64 }}
-          filename: "development.p12"
-          working-directory: "ios/certs"
+          filename: "dist-cert.p12"
+          working-directory: "credentials/ios"
+
+      # IT'S PUBLIC REPOSITORY. Files are hidden in private gist.githubusercontent.com:
+      - name: 🏗 Download .a/.aar
+        env:
+          ANDROID_LIB_ALPHA_OPEN_URL: ${{ secrets.ANDROID_LIB_ALPHA_OPEN_URL }}
+          IOS_LIB_ALPHA_OPEN_URL: ${{ secrets.IOS_LIB_ALPHA_OPEN_URL }}
+        run: |
+          curl $ANDROID_LIB_ALPHA_OPEN_URL | base64 -d > ./modules/esmart/android/libs/lib-alphaopenRelease-1.19.aar
+          curl $IOS_LIB_ALPHA_OPEN_URL | base64 -d > ./modules/esmart/ios/libEsmartVirtualCard.a
 
       - name: 🏗 Setup Node
         uses: actions/setup-node@v3
@@ -80,6 +98,15 @@ jobs:
       - name: 📦 Install dependencies
         run: npm i
 
+      - name: 📦 Build libs
+        run: npm run build-libs
+
+#      - name: 📦 Reinstall dependencies
+#        run: npm i
+
+      - name: 📦 Install built libs
+        run: npm run install-libs
+
 #      - name: 📋 Test project
 #        run: yarn test
 
@@ -90,10 +117,19 @@ jobs:
             --platform=${{ inputs.platform }} \
             --profile=${{ inputs.profile }}
 
-      - name: Archive artifacts
+      - name: 📑 Collect logs
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: logs-${{ inputs.platform }}-${{ github.event.repository.name }}-${{ github.run_number }}
+          path: |
+            ${{ env.EAS_LOCAL_BUILD_WORKINGDIR || '/not-found' }}/**/*.log
+#           example: /var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/eas-build-local-nodejs/f38c9623-76d4-4099-9233-ab4fa5a3dedf
+
+      - name: 📦 Archive artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: app-build
+          name: build-${{ inputs.platform }}-${{ github.event.repository.name }}-${{ github.run_number }}
           path: |
             ./*.aab
             ./*.apk
@@ -101,6 +137,50 @@ jobs:
             android/app/build/outputs/**/*.aab
             android/app/build/outputs/**/*.apk
             ios/build/*.ipa
+
+      - name: ✈️ Generate installation link for .ipa/.aab/.apk
+        if: ${{ !cancelled() && !failure() }}
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 3
+          max_attempts: 2
+          command: |
+            export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | awk '/<meta.*csrf-token.*content="(.+)".*>/ { print substr($3, 10, 100) }' | awk '{sub(/">/,"")}1' )
+
+            echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
+  
+            export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|aab|apk]')
+  
+            echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
+  
+            curl -X POST -H "Accept: application/json" --silent -v -F ajax=1 -F user_id=0 -F submitBtn= -F _token=$INSTALL_ON_AIR_CSRF_TOKEN -F ipafile=@$INSTALL_ON_AIR_FILE https://fupload.installonair.com/ipafile > response-json.txt
+            
+            cat response-json.txt
+            
+            export INSTALL_ON_AIR_RESPONSE_JSON=$(awk '{/.*/}1' response-json.txt)
+  
+            echo "INSTALL_ON_AIR_RESPONSE_JSON: $INSTALL_ON_AIR_RESPONSE_JSON"
+  
+            echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
+
+      - name: ✈️ Show installation link for .ipa/.aab/.apk (https://installonair.com)
+        if: ${{ !cancelled() && !failure() && env.INSTALL_ON_AIR_RESPONSE_JSON }}
+        run: |
+          echo '## Install On Air ✈️' >> $GITHUB_STEP_SUMMARY
+
+          echo '- Success: **${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).status || '--' }}**' >> $GITHUB_STEP_SUMMARY
+          echo '- Name: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.appName || '--' }}' >> $GITHUB_STEP_SUMMARY
+          echo '- Link: [installation link](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.link || '--' }})' >> $GITHUB_STEP_SUMMARY
+          echo '- Expiration: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.expiryDate || '--' }}' >> $GITHUB_STEP_SUMMARY
+          echo '- App ID: ${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.app_id || '--' }}' >> $GITHUB_STEP_SUMMARY
+
+          echo '### Installation QR Code 📱' >> $GITHUB_STEP_SUMMARY
+          echo '![qr-code](${{ fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data && fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON).data.image || 'https://http.cat/images/404.jpg' }})' >> $GITHUB_STEP_SUMMARY
+
+          echo '### Original response' >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(fromJson(env.INSTALL_ON_AIR_RESPONSE_JSON)) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
 #      - name: 🚢 Submit
 #        if: ${{ inputs.should_submit }}

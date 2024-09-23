@@ -34,5 +34,13 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+credentials/ios
+credentials/android
 credentials.json
-ios/certs
+
+.env
+
+# builds (artifacts)
+*.ipa
+*.apk
+*.aab

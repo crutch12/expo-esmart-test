@@ -67,6 +67,17 @@ target 'expoesmarttest' do
         end
       end
     end
+
+    # Could not find or use auto-linked framework 'CoreAudioTypes': framework 'CoreAudioTypes' not found
+    # https://github.com/facebook/react-native/issues/43498
+    installer.pods_project.build_configurations.each do |config|
+      if config.name.include?("Debug")
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+        if !config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].include? 'DEBUG=1'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'DEBUG=1'
+        end
+      end
+    end
   end
 
   post_integrate do |installer|
