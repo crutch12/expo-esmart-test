@@ -9,7 +9,7 @@ const modules = [
   },
   {
     env: 'IOS_LIB_ALPHA_OPEN_URL',
-    output: path.resolve(__dirname, './ios/libEsmartVirtualCard.a'),
+    output: path.resolve(__dirname, './ios/libs/libEsmartVirtualCard.a'),
   },
 ];
 

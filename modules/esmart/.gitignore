@@ -1,5 +1,5 @@
 lib
 *.tgz
-ios/libEsmartVirtualCard.a
+ios/libs/libEsmartVirtualCard.a
 android/libs/lib-alphaopenRelease-1.19.aar
 .env
