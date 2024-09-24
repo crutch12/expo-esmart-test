@@ -31,3 +31,10 @@ yarn-error.*
 *.ipa
 *.apk
 *.aab
+
+# Eas
+android/build/
+android/.idea
+android/.gradle
+ios/build/
+ios/Pods/
