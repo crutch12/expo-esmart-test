@@ -4,24 +4,26 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
+    "base": {
       "ios": {
         "credentialsSource": "local"
+      },
+      "env": {
+        "EAS_NO_VCS": "1",
       }
+    },
+    "development": {
+      "extends": "base",
+      "developmentClient": true,
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "ios": {
-        "credentialsSource": "local"
-      }
+      "extends": "base",
+      "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true,
-      "ios": {
-        "credentialsSource": "local"
-      }
+      "extends": "base",
+      "autoIncrement": true
     }
   },
   "submit": {
