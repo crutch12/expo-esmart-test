@@ -137,20 +137,28 @@ jobs:
             android/app/build/outputs/**/*.apk
             ios/build/*.ipa
 
-      - name: ✈️ Generate installation link for .ipa/.aab/.apk
+      - name: ✈️ Generate installation link for .ipa/.apk
         if: ${{ !cancelled() && !failure() }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 3
           max_attempts: 2
           command: |
+            export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|apk]')
+  
+            echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
+
+            if [ -z "${INSTALL_ON_AIR_FILE}" ];
+            then
+              echo "INSTALL_ON_AIR_FILE is empty (maybe it's .aab file? they are not supported). Skipping installation link generation ❌"
+              echo '## Install On Air ✈️' >> $GITHUB_STEP_SUMMARY
+              echo 'Skipped ❌' >> $GITHUB_STEP_SUMMARY
+              exit 0
+            fi
+
             export INSTALL_ON_AIR_CSRF_TOKEN=$( curl https://installonair.com --silent | awk '/<meta.*csrf-token.*content="(.+)".*>/ { print substr($3, 10, 100) }' | awk '{sub(/">/,"")}1' )
 
             echo "INSTALL_ON_AIR_CSRF_TOKEN: $INSTALL_ON_AIR_CSRF_TOKEN"
-  
-            export INSTALL_ON_AIR_FILE=$(ls | grep '.*\.[ipa|aab|apk]')
-  
-            echo "INSTALL_ON_AIR_FILE: $INSTALL_ON_AIR_FILE"
   
             curl -X POST -H "Accept: application/json" --silent -v -F ajax=1 -F user_id=0 -F submitBtn= -F _token=$INSTALL_ON_AIR_CSRF_TOKEN -F ipafile=@$INSTALL_ON_AIR_FILE https://fupload.installonair.com/ipafile > response-json.txt
             
@@ -162,7 +170,7 @@ jobs:
   
             echo "INSTALL_ON_AIR_RESPONSE_JSON=$INSTALL_ON_AIR_RESPONSE_JSON" >> $GITHUB_ENV
 
-      - name: ✈️ Show installation link for .ipa/.aab/.apk (https://installonair.com)
+      - name: ✈️ Show installation link for .ipa/.apk (https://installonair.com)
         if: ${{ !cancelled() && !failure() && env.INSTALL_ON_AIR_RESPONSE_JSON }}
         run: |
           echo '## Install On Air ✈️' >> $GITHUB_STEP_SUMMARY
