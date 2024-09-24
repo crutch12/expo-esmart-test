@@ -10,6 +10,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "download-libs": "cd ./modules/esmart && npm run download-libs",
     "build-libs": "cd ./modules/esmart && npm run build && npm pack",
     "install-libs": "npm i ./modules/esmart/react-native-esmart-0.0.0.tgz"
   },
