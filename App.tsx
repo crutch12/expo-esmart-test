@@ -46,7 +46,12 @@ function Main() {
 
   useEffect(() => {
     if (Platform.OS === 'ios') {
-      registerForNotifications((value) => Alert.alert(JSON.stringify(value)));
+      const removeFirstListener = registerForNotifications((value) => Alert.alert('#1' + JSON.stringify(value)));
+      const removeSecondListener = registerForNotifications((value) => Alert.alert('#2' + JSON.stringify(value)));
+      return () => {
+        removeFirstListener();
+        removeSecondListener();
+      };
     }
   }, []);
 
