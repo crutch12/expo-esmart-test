@@ -687,8 +687,8 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //     }
 // }
 //
-// #pragma mark - Group
-//
+#pragma mark - Group
+
 // - (void)groupGetInfo:(CDVInvokedUrlCommand *)command
 // {
 //     NSString *groupID = [command argumentAtIndex:0 withDefault:nil andClass:[NSString class]];
@@ -720,7 +720,36 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(groupGetInfo: groupId:(NSString *)groupId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    Group *group = [GroupsManager groupByIdentifier:groupId];
+
+    if (group) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+        dict[@"groupId"]                 = group.groupId;
+        dict[@"groupName"]               = group.groupName;
+        dict[@"keyId"]                   = group.keyId;
+        dict[@"userId"]                  = [group.userId base64EncodedStringWithOptions:0];
+        dict[@"defaultTapArea"]          = @(group.defaultTapArea);
+        dict[@"defaultNotificationArea"] = @(group.defaultNotificationArea);
+        dict[@"adminEMail"]              = group.adminEMail;
+        dict[@"adminPhone"]              = group.adminPhone;
+        dict[@"helpText"]                = group.helpText;
+        dict[@"helpTextInt"]             = group.helpTextInt;
+        dict[@"enabled"]                 = @(group.enabled);
+        dict[@"exchangeVersion"]         = group.exchangeVersion;
+        dict[@"expire"]                  = @(group.expire);
+        dict[@"expired"]                 = @(group.expired);
+        dict[@"activationId"]            = group.activationId;
+        dict[@"requestData"]             = [group.requestData base64EncodedStringWithOptions:0];
+
+        resolve(dict)
+    } else {
+        reject(@"groupGetInfo_failure", @"no group found", nil);
+    }
+}
+
 // -(void) groupVerifyDone:(CDVInvokedUrlCommand*)command {
 //
 //     BOOL isCorrectArgs = [self checkArguments:command.arguments withTypes:@[ [NSString class]]];
@@ -738,7 +767,24 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble:verifyDone.timeIntervalSince1970];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(groupVerifyDone: groupId:(NSString *)groupId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    BOOL isCorrectArgs = [self checkArguments:@[groupId] withTypes:@[ [NSString class] ]];
+    if (isCorrectArgs == NO) {
+        reject(@"groupVerifyDone_failure", @"groupID is not string", nil);
+        return;
+    }
+
+    Group* group = [GroupsManager groupByIdentifier:groupId];
+    NSDate* verifyDone = [group verifyDone];
+    if (verifyDone == nil) {
+        reject(@"groupVerifyDone_failure", @"verifyDone is empty", nil);
+        return;
+    }
+
+    resolve(@(verifyDone.timeIntervalSince1970))
+}
+
 // #pragma mark - DataFormatter
 //
 
@@ -817,7 +863,7 @@ RCT_EXPORT_METHOD(loggerGetCountLogs: resolve:(RCTPromiseResolveBlock)resolve re
 {
     NSString* count = [Logger getCount];
     int intValue = [count intValue];
-    resolve(@(count));
+    resolve(@(intValue));
 }
 
 /// флаг вывода логируемых событий в отладочную консоль в момент возникновения события.

@@ -138,3 +138,11 @@ export function loggerPauseLogs(): Promise<true> {
 export function loggerGetLogsPaused(): Promise<boolean> {
   return Esmart.loggerGetLogsPaused();
 }
+
+export function groupGetInfo(groupId: string): Promise<Record<string, string | boolean | number>> {
+  return Esmart.groupGetInfo(groupId);
+}
+
+export function groupVerifyDone(groupId: string): Promise<number> {
+  return Esmart.groupVerifyDone(groupId);
+}
