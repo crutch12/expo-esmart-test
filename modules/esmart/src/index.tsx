@@ -154,3 +154,19 @@ export function readerProfileGetInfo(readerId: string): Promise<Record<string, s
 export function readerProfileIsIdentifierDetermined(readerId: string): Promise<boolean> {
   return Esmart.readerProfileIsIdentifierDetermined(readerId);
 }
+
+export function importerSetAESKey(base64Key: string): Promise<true> {
+  return Esmart.importerSetAESKey(base64Key);
+}
+
+export function importerGenerateAndSetAESKey(): Promise<string> {
+  return Esmart.importerGenerateAndSetAESKey();
+}
+
+export function importerImportDataFromFiles(files: string[]): Promise<true> {
+  return Esmart.importerImportDataFromFiles(files);
+}
+
+export function importerImportDataFromFile(file: string): Promise<true> {
+  return Esmart.importerImportDataFromFile(file);
+}

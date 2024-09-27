@@ -530,55 +530,55 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //     [BeaconMonitor exitRegion:region];
 // }
 //
-// #pragma mark - Importer
-//
-// - (BOOL)internalSetKey:(NSData *)key
-// {
-//     if (!key || key.length != 16) {
-//         return NO;
-//     }
-//
-//     // параметры запроса
-//     NSMutableDictionary *query = [NSMutableDictionary dictionary];
-//
-//     query[(__bridge id)kSecClass]              = (__bridge id)kSecClassGenericPassword;
-//     query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kSecAttrSynchronizableAny;
-//     query[(__bridge id)kSecAttrService]        = @"ISBCKeyCard";
-//     query[(__bridge id)kSecAttrAccount]        = @"K_AES";
-//
-//     // убьём старый ключ, если есть
-//     SecItemDelete((__bridge CFDictionaryRef)query);
-//
-//     // сохраним новый ключ
-//     query[(__bridge id)kSecValueData]          = key;
-//     query[(__bridge id)kSecAttrAccessible]     = (__bridge id)kSecAttrAccessibleAlways;
-//
-//     return SecItemAdd((__bridge CFMutableDictionaryRef)query, NULL) == errSecSuccess;
-// }
-//
-// - (NSData *)internalGetKey
-// {
-//     // параметры запроса
-//     NSMutableDictionary *query = [NSMutableDictionary dictionary];
-//
-//     query[(__bridge id)kSecClass]              = (__bridge id)kSecClassGenericPassword;
-//     query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kSecAttrSynchronizableAny;
-//     query[(__bridge id)kSecAttrService]        = @"ISBCKeyCard";
-//     query[(__bridge id)kSecAttrAccount]        = @"K_AES";
-//     query[(__bridge id)kSecReturnData]         = @YES;
-//
-//     // попробуем получить ключ
-//     CFTypeRef resultRef;
-//
-//     if (SecItemCopyMatching((__bridge CFMutableDictionaryRef)query, &resultRef) != errSecSuccess) {
-//         return nil;
-//     }
-//
-//     NSData *key = (__bridge id)resultRef;
-//
-//     return key;
-// }
-//
+#pragma mark - Importer
+
+- (BOOL)internalSetKey:(NSData *)key
+{
+    if (!key || key.length != 16) {
+        return NO;
+    }
+
+    // параметры запроса
+    NSMutableDictionary *query = [NSMutableDictionary dictionary];
+
+    query[(__bridge id)kSecClass]              = (__bridge id)kSecClassGenericPassword;
+    query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kSecAttrSynchronizableAny;
+    query[(__bridge id)kSecAttrService]        = @"ISBCKeyCard";
+    query[(__bridge id)kSecAttrAccount]        = @"K_AES";
+
+    // убьём старый ключ, если есть
+    SecItemDelete((__bridge CFDictionaryRef)query);
+
+    // сохраним новый ключ
+    query[(__bridge id)kSecValueData]          = key;
+    query[(__bridge id)kSecAttrAccessible]     = (__bridge id)kSecAttrAccessibleAlways;
+
+    return SecItemAdd((__bridge CFMutableDictionaryRef)query, NULL) == errSecSuccess;
+}
+
+- (NSData *)internalGetKey
+{
+    // параметры запроса
+    NSMutableDictionary *query = [NSMutableDictionary dictionary];
+
+    query[(__bridge id)kSecClass]              = (__bridge id)kSecClassGenericPassword;
+    query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kSecAttrSynchronizableAny;
+    query[(__bridge id)kSecAttrService]        = @"ISBCKeyCard";
+    query[(__bridge id)kSecAttrAccount]        = @"K_AES";
+    query[(__bridge id)kSecReturnData]         = @YES;
+
+    // попробуем получить ключ
+    CFTypeRef resultRef;
+
+    if (SecItemCopyMatching((__bridge CFMutableDictionaryRef)query, &resultRef) != errSecSuccess) {
+        return nil;
+    }
+
+    NSData *key = (__bridge id)resultRef;
+
+    return key;
+}
+
 // - (void)importerSetAESKey:(CDVInvokedUrlCommand *)command
 // {
 //     NSData *key = [command argumentAtIndex:0 withDefault:nil andClass:[NSData class]];
@@ -589,7 +589,23 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(importerSetAESKey: base64Key:(NSString *)base64Key resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    // Convert the base64-encoded key (received from JS) to NSData
+    NSData *key = [[NSData alloc] initWithBase64EncodedString:base64Key options:0];
+
+    if (!key) {
+        reject(@"importerSetAESKey_failure", @"The provided key is not valid", nil);
+        return;
+    }
+
+    if ([self internalSetKey:key]) {
+        resolve(@(YES));
+    } else {
+        reject(@"importerSetAESKey_failure", @"internalSetKey failed", nil);
+    }
+}
+
 // - (void)importerGenerateAndSetAESKey:(CDVInvokedUrlCommand *)command
 // {
 //     // сгенерируем новый ключ
@@ -605,7 +621,23 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(importerGenerateAndSetAESKey: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    // сгенерируем новый ключ
+    uuid_t uuid;
+    [[NSUUID UUID] getUUIDBytes:uuid];
+    NSData *key = [NSData dataWithBytes:uuid length:16];
+
+    // сохраним
+    if ([self internalSetKey:key]) {
+        // Convert NSData to a Base64-encoded string to send to JavaScript
+        NSString *base64Key = [key base64EncodedStringWithOptions:0];
+        resolve(base64Key);
+    } else {
+        reject(@"importerGenerateAndSetAESKey_failure", @"internalSetKey failed", nil);
+    }
+}
+
 // - (void)importerImportDataFromFiles:(CDVInvokedUrlCommand *)command
 // {
 //     NSArray *strings = [command argumentAtIndex:0 withDefault:nil andClass:[NSArray class]];
@@ -625,7 +657,26 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //     [Importer importDataFromFiles:urls];
 //     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(importerImportDataFromFiles: strings:(NSArray<NSString *> *)strings resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    NSMutableArray<NSURL *> *urls = [NSMutableArray arrayWithCapacity:strings.count];
+
+    for (NSString *string in strings) {
+        NSURL *url = [NSURL fileURLWithPath:string];
+
+        if (url) {
+            [urls addObject:url];
+        } else {
+            reject(@"importerImportDataFromFiles_failure", [NSString stringWithFormat:@"Invalid string: %@", string], nil);
+            return;
+        }
+    }
+
+    [Importer importDataFromFiles:urls];
+
+    resolve(@(YES));
+}
+
 // - (void)importerImportDataFromFile:(CDVInvokedUrlCommand *)command
 // {
 //     NSString *string = [command argumentAtIndex:0 withDefault:nil andClass:[NSString class]];
@@ -639,7 +690,18 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         return;
 //     }
 // }
-//
+RCT_EXPORT_METHOD(importerImportDataFromFile: string:(NSString *)string resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    NSURL *url = [NSURL fileURLWithPath:string];
+
+    if (url) {
+        [Importer importFile:url batchOperation:NO];
+        resolve(@(YES));
+    } else {
+        reject(@"importerImportDataFromFile_failure", [NSString stringWithFormat:@"Invalid string: %@", string], nil);
+    }
+}
+
 #pragma mark - ReaderProfile
 
 // - (void)readerProfileGetInfo:(CDVInvokedUrlCommand *)command
@@ -695,7 +757,7 @@ RCT_EXPORT_METHOD(readerProfileGetInfo: readerId:(NSString *)readerId resolve:(R
         dict[@"forceContinuousRSSI"] = @(reader.forceContinuousRSSI);
         dict[@"lastOpenTime"]        = @([reader.lastOpenTime timeIntervalSince1970]);
 
-        resolve(dict)
+        resolve(dict);
     } else {
         reject(@"readerProfileGetInfo_failure", @"no reader instance found", nil);
     }
@@ -720,7 +782,7 @@ RCT_EXPORT_METHOD(readerProfileIsIdentifierDetermined: readerId:(NSString *)read
 
     if (reader) {
         BOOL isIdentifierDetermined = [reader identifierDetermined];
-        resolve(@(isIdentifierDetermined))
+        resolve(@(isIdentifierDetermined));
     } else {
         reject(@"readerProfileIsIdentifierDetermined_failure", @"no reader instance found", nil);
     }
@@ -783,7 +845,7 @@ RCT_EXPORT_METHOD(groupGetInfo: groupId:(NSString *)groupId resolve:(RCTPromiseR
         dict[@"activationId"]            = group.activationId;
         dict[@"requestData"]             = [group.requestData base64EncodedStringWithOptions:0];
 
-        resolve(dict)
+        resolve(dict);
     } else {
         reject(@"groupGetInfo_failure", @"no group found", nil);
     }
@@ -821,7 +883,7 @@ RCT_EXPORT_METHOD(groupVerifyDone: groupId:(NSString *)groupId resolve:(RCTPromi
         return;
     }
 
-    resolve(@(verifyDone.timeIntervalSince1970))
+    resolve(@(verifyDone.timeIntervalSince1970));
 }
 
 // #pragma mark - DataFormatter
