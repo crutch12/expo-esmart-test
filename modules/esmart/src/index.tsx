@@ -114,3 +114,27 @@ export function globalPropertySetOnlyKnownGroupsAllowed(value: boolean): Promise
 export function libKeyCardGetAPIVersion(): Promise<string> {
   return Esmart.libKeyCardGetAPIVersion();
 }
+
+export function loggerDumpLogs(): Promise<true> {
+  return Esmart.loggerDumpLogs();
+}
+
+export function loggerPurgeLogs(): Promise<true> {
+  return Esmart.loggerPurgeLogs();
+}
+
+export function loggerGetCountLogs(): Promise<number> {
+  return Esmart.loggerGetCountLogs();
+}
+
+export function loggerSetRealTimeLog(value: boolean): Promise<boolean> {
+  return Esmart.loggerSetRealTimeLog(value);
+}
+
+export function loggerPauseLogs(): Promise<true> {
+  return Esmart.loggerPauseLogs();
+}
+
+export function loggerGetLogsPaused(): Promise<boolean> {
+  return Esmart.loggerGetLogsPaused();
+}

@@ -1,8 +1,8 @@
 //
-//  AlphaOpen.h
-//  AlphaOpen
+//  Esmart.h
+//  Esmart
 //
-//  Created by Денис Либит on 04.03.2019.
+//  Created by @crutch12 on 18.09.2024.
 //
 
 // #import "AppDelegate.h"

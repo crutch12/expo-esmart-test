@@ -2,7 +2,7 @@
 //  Esmart.m
 //  Esmart
 //
-//  Created by Денис Либит on 04.03.2019.
+//  Created by @crutch12 on 18.09.2024.
 //
 
 #import "Esmart.h"
@@ -778,42 +778,49 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 // }
 //
 
-// #pragma mark - Logger
-//
+#pragma mark - Logger
 
-// @REMOVE: Not used (should keep)
-// /// Cброс накопленных логов в отладочную консоль
+/// Cброс накопленных логов в отладочную консоль
 // -(void) loggerDumpLogs:(CDVInvokedUrlCommand *)command {
 //
 //     [Logger dumpLogs];
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(loggerDumpLogs: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [Logger dumpLogs];
+    resolve(@(YES));
+}
 
-// @REMOVE: Not used (should keep)
-// /// Принудительное удаление логов
+/// Принудительное удаление логов
 // -(void) loggerPurgeLogs:(CDVInvokedUrlCommand *)command {
 //
 //     [Logger purgeLogs];
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
-//
+RCT_EXPORT_METHOD(loggerPurgeLogs: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [Logger purgeLogs];
+    resolve(@(YES));
+}
 
-// @REMOVE: Not used (should keep)
-// /// Возвращает число лог-записей (одна запись - одно событие)
+
+/// Возвращает число лог-записей (одна запись - одно событие)
 // -(void) loggerGetCountLogs:(CDVInvokedUrlCommand *)command {
-//
 //     NSString* count = [Logger getCount];
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:count];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(loggerGetCountLogs: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    NSString* count = [Logger getCount];
+    int intValue = [count intValue];
+    resolve(@(count));
+}
 
-// @REMOVE: Not used (should keep)
-// /// флаг вывода логируемых событий в отладочную консоль в момент возникновения события.
+/// флаг вывода логируемых событий в отладочную консоль в момент возникновения события.
 // -(void) loggerSetRealTimeLog :(CDVInvokedUrlCommand *)command {
 //
 //     NSObject* enabledValue = [command.arguments firstObject];
@@ -827,27 +834,38 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(loggerSetRealTimeLog: enabled:(BOOL)enabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [Logger realTimeLog:enabled];
+    resolve(@(enabled));
+}
 
-// @REMOVE: Not used (should keep)
-// /// включить/выключить логирование
+/// включить/выключить логирование
 // -(void) loggerPauseLogs :(CDVInvokedUrlCommand *)command{
 //
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];;
 //     [Logger pauseLogs];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(loggerPauseLogs: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    [Logger pauseLogs];
+    resolve(@(YES));
+}
 
-// @REMOVE: Not used (should keep)
-// ///  текущее состояние ведения логов.
+///  текущее состояние ведения логов.
 // -(void) loggerGetLogsPaused :(CDVInvokedUrlCommand *)command{
 //
 //     BOOL isPaused = [Logger logsPaused];
 //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: isPaused];
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
-//
+RCT_EXPORT_METHOD(loggerGetLogsPaused: resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    BOOL isPaused = [Logger logsPaused];
+    resolve(@(isPaused));
+}
+
 #pragma mark - Private methods
 
 -(BOOL) checkArguments:(NSArray*) args withTypes:(NSArray<Class>*) types {
