@@ -146,3 +146,11 @@ export function groupGetInfo(groupId: string): Promise<Record<string, string | b
 export function groupVerifyDone(groupId: string): Promise<number> {
   return Esmart.groupVerifyDone(groupId);
 }
+
+export function readerProfileGetInfo(readerId: string): Promise<Record<string, string | boolean | number>> {
+  return Esmart.readerProfileGetInfo(readerId);
+}
+
+export function readerProfileIsIdentifierDetermined(readerId: string): Promise<boolean> {
+  return Esmart.readerProfileIsIdentifierDetermined(readerId);
+}

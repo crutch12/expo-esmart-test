@@ -640,8 +640,8 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //     }
 // }
 //
-// #pragma mark - ReaderProfile
-//
+#pragma mark - ReaderProfile
+
 // - (void)readerProfileGetInfo:(CDVInvokedUrlCommand *)command
 // {
 //     NSString *readerID = [command argumentAtIndex:0 withDefault:nil andClass:[NSString class]];
@@ -672,7 +672,35 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(readerProfileGetInfo: readerId:(NSString *)readerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    ReaderProfile *reader = [[ReadersManager getInstance] getReaderProfileById:readerId];
+
+    if (reader) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+        dict[@"rssi"]                = @(reader.rssi);
+        dict[@"TapArea"]             = @(reader.TapArea);
+        dict[@"NotificationArea"]    = @(reader.NotificationArea);
+        dict[@"CurrentZone"]         = reader.CurrentZone.zone;
+        dict[@"lastSeen"]            = @([reader.lastSeen timeIntervalSince1970]);
+        dict[@"identifier"]          = reader.identifier;
+        dict[@"groupId"]             = reader.groupId;
+        dict[@"status"]              = @(reader.status);
+        dict[@"readerVersion"]       = reader.readerVersion;
+        dict[@"displayName"]         = reader.displayName;
+        dict[@"vibration"]           = @(reader.vibration);
+        dict[@"autoTalk"]            = @(reader.autoTalk);
+        dict[@"manualTalk"]          = @(reader.manualTalk);
+        dict[@"forceContinuousRSSI"] = @(reader.forceContinuousRSSI);
+        dict[@"lastOpenTime"]        = @([reader.lastOpenTime timeIntervalSince1970]);
+
+        resolve(dict)
+    } else {
+        reject(@"readerProfileGetInfo_failure", @"no reader instance found", nil);
+    }
+}
+
 // - (void)readerProfileIsIdentifierDetermined:(CDVInvokedUrlCommand *)command
 // {
 //     NSString *readerID = [command argumentAtIndex:0 withDefault:nil andClass:[NSString class]];
@@ -686,7 +714,18 @@ RCT_EXPORT_METHOD(libKeyCardGetAPIVersion: resolve:(RCTPromiseResolveBlock)resol
 //         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
 //     }
 // }
-//
+RCT_EXPORT_METHOD(readerProfileIsIdentifierDetermined: readerId:(NSString *)readerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    ReaderProfile *reader = [[ReadersManager getInstance] getReaderProfileById:readerId];
+
+    if (reader) {
+        BOOL isIdentifierDetermined = [reader identifierDetermined];
+        resolve(@(isIdentifierDetermined))
+    } else {
+        reject(@"readerProfileIsIdentifierDetermined_failure", @"no reader instance found", nil);
+    }
+}
+
 #pragma mark - Group
 
 // - (void)groupGetInfo:(CDVInvokedUrlCommand *)command
